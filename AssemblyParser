@@ -1,8 +1,9 @@
 #This is the assembly language parser
 
 instructions = Array{AbstractString}(2047,4)
+labelDict = Dict() #Creates the dictionary for labels
 fill!(instructions,"")
-inStream = open("/home/kino/Documents/CPU_Simulator/instructions.txt") #Open the input file and set the input stream
+inStream = open("instructions.txt") #Open the input file and set the input stream
 lines = readlines(inStream) # Create an array with each element, an instruction
 
 counter = 1 #Start the counter
@@ -23,17 +24,24 @@ for l in lines #Stepping through the lines
   elseif size(splitLine)[1] == 2 && contains(l,":")
     instructions[counter,1] = splitLine[1]
     instructions[counter,2] = splitLine[2]
+      #ADDS LABEL TO DICTIONARY
+      labelDict["$(splitLine[1])"] = counter
+
 
   #CASE: "LABEL + OP1"
   elseif size(splitLine)[1] == 2
     instructions[counter,2] = splitLine[1]
     instructions[counter,3] = splitLine[2]
+      #ADDS LABEL TO DICTIONARY
+      labelDict["$(splitLine[1])"] = counter
 
   #CASE: "LABEL + INST + OP1"
   elseif size(splitLine)[1] == 3 && contains(l,":")
     instructions[counter,1] = splitLine[1]
     instructions[counter,2] = splitLine[2]
     instructions[counter,3] = splitLine[3]
+      #ADDS LABEL TO DICTIONARY
+      labelDict["$(splitLine[1])"] = counter
 
   #CASE: "INST + OP1 + OP2"
   elseif size(splitLine)[1] == 3 && contains(l,",")
@@ -47,9 +55,11 @@ for l in lines #Stepping through the lines
   instructions[counter,2] = splitLine[2]
   instructions[counter,3] = splitLine[3]
   instructions[counter,4] = splitLine[4]
+    #ADDS LABEL TO DICTIONARY
+    labelDict["$(splitLine[1])"] = counter
   end
 
    counter += 1
 end
-#println(instructions[1:5,:])
+
 close(inStream)
