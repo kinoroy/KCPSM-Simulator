@@ -1,8 +1,121 @@
-#This is the assembly language parser
+#= This is the assembly language parser
+Created by: Kino Roy for CMPT 276, Assignment 1. =#
+module AssemblyParser
+#=-------------------------
+BEGIN FUNCTION DECLARATION
+--------------------------=#
 
+function load(sX, sY)
+end
+
+function star(sX, sY)
+end
+
+function and(sX, sY)
+ println("anding")
+end
+
+function or(sX, sY)
+end
+function xor()
+end
+function add(sX, sY)
+println("adding s1,s2")
+end
+function addcy(sX, sY)
+end
+function sub(sX, sY)
+println("subbing")
+end
+function subcy(sX, sY)
+end
+function test(sX, sY)
+end
+function testcy(sX, sY)
+end
+function compare(sX, sY)
+end
+function comparecy(sX, sY)
+end
+function sl0(sX)
+end
+function sl1(sX)
+end
+function slx(sX)
+end
+function sla(sX)
+end
+function rl(sX)
+
+end
+function sr0(sX)
+end
+function sr1(sX)
+end
+function srx(sX)
+end
+function sra(sX)
+end
+function rr(sX)
+end
+function regbank(A::String)
+end
+
+function input(sX)
+  nIn = parse(UInt8,readline(STDIN)) #Reads in a number from 0 to 255
+
+end
+
+
+function output()
+end
+function outputk()
+end
+function store()
+end
+function fetch()
+end
+
+jumped = false
+
+function jump(label)
+global jumped = true
+label = chomp(label)
+  global PC = labelDict["$(label)"] #Change the program counter to point to label
+end
+
+function thisCall()
+end
+
+function thisReturn()
+end
+
+#=-------------------------------------
+ END FUNCTION DECLARATION
+ ------------------------------------=#
+
+#=-----------------------------------------
+Define Data
+------------------------------------------=#
 instructions = Array{AbstractString}(2047,4)
 labelDict = Dict() #Creates the dictionary for labels
+
+instructionsOneArgDict = Dict("SL0" => sl0, "SL1" => sl1, "SLX" => slx, "SLA" => sla
+, "RL" => rl, "SR0" => sr0, "SR1" => sr1, "SRX" => srx, "SRA" => sra, "RR" => rr, "JUMP" => jump
+, "CALL" => thisCall, "STORE" => store, "FETCH" => fetch, "INPUT" => input, "OUTPUT" => output
+, "RETURN" => thisReturn, "REGBANK" => regbank) #Creates dictionary of functions w/ one arguments
+
+instructionsTwoArgDict = Dict("LOAD" => load,"STAR" => star,"AND" => and,"OR" => or,"XOR" => xor,
+"ADD" => add,"ADDCY" => addcy,"SUB" => sub,"SUBCY" => subcy,"TEST" => test,"TESTCY" => testcy,
+"COMPARE" => compare,"INPUT" => input,"OUTPUT" => output,"OUTPUTK" => store,"STORE" => store,
+"FETCH" => fetch,"JUMP" => jump,"CALL" => thisCall) #Creates dictionary of functions w/ two arguments
+
+PC = 1
+
 fill!(instructions,"")
+#=-----------------------------
+BEGIN FILE READING
+------------------------------=#
 inStream = open("instructions.txt") #Open the input file and set the input stream
 lines = readlines(inStream) # Create an array with each element, an instruction
 
@@ -28,7 +141,7 @@ for l in lines #Stepping through the lines
       labelDict["$(splitLine[1])"] = counter
 
 
-  #CASE: "LABEL + OP1"
+  #CASE: "INST + OP1"
   elseif size(splitLine)[1] == 2
     instructions[counter,2] = splitLine[1]
     instructions[counter,3] = splitLine[2]
@@ -61,5 +174,49 @@ for l in lines #Stepping through the lines
 
    counter += 1
 end
-
 close(inStream)
+#=-----------
+ END READING
+ -----------=#
+
+#=-----------
+BEGIN EXECUTE
+------------=#
+
+while PC<= size(instructions)[1] #iterate through all instructions
+
+  currentInst = instructions[PC,2]
+
+  if isempty(currentInst) #Checks if there are no more instructions to execute
+    break
+  end
+
+  firstArg = instructions[PC,3]
+  secondArg = instructions[PC,4]
+
+  hasArg1 = false;
+  hasArg2 = false;
+
+  if !isempty(firstArg) #Checks if 1st argument exists
+    hasArg1 = true
+  end
+  if !isempty(secondArg) #Checks if 2nd argument exists
+    hasArg2 = true
+
+  end
+
+  if hasArg1 == false && hasArg2 == false #No arguments
+    println("Calling return")
+  elseif hasArg1 == true && hasArg2 == false #1 argument
+    instructionsOneArgDict["$(currentInst)"](firstArg)
+  elseif hasArg1 == true && hasArg2 == true #2 arguments
+    instructionsTwoArgDict["$(currentInst)"](firstArg,secondArg)
+  end
+
+if !jumped PC+=1 end #increment program counter
+jumped = false
+end
+#=------------
+end execute
+-------------=#
+end
