@@ -3,6 +3,7 @@ Created by: Kino Roy for CMPT 276, Assignment 1. =#
 module AssemblyParser
 #=-------------------------
 BEGIN FUNCTION DECLARATION
+(!!CODE FOR EXECUTING ALL INSTRUCTIONS GOES HERE!!)
 --------------------------=#
 
 function load(sX, sY)
@@ -93,9 +94,11 @@ end
 #=-------------------------------------
  END FUNCTION DECLARATION
  ------------------------------------=#
-
+ #=-------------------------------------
+  BEGIN ASSEMBLY PARSER
+  ------------------------------------=#
 #=-----------------------------------------
-Define Data
+Initializing data structures for holding data
 ------------------------------------------=#
 instructions = Array{AbstractString}(2047,4)
 labelDict = Dict() #Creates the dictionary for labels
@@ -127,6 +130,8 @@ for l in lines #Stepping through the lines
 
 
   splitLine = split(l,r":| |,",keep=false) #Filters text
+
+#---- Begin Parsing ----#
 
   #CASE: "INST"
   if size(splitLine)[1] == 1
@@ -217,6 +222,9 @@ if !jumped PC+=1 end #increment program counter
 jumped = false
 end
 #=------------
-end execute
+END EXECUTE
 -------------=#
 end
+#=------------
+END ASSEMBLY PARSER
+-------------=#
