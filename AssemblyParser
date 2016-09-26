@@ -1,9 +1,9 @@
 #= This is the assembly language parser
 Created by: Kino Roy for CMPT 276, Assignment 1. =#
-module AssemblyParser
+module AssemblyParser #Module declaration temp patches warning bug: later to delete
 #=-------------------------
 BEGIN FUNCTION DECLARATION
-(!!CODE FOR EXECUTING ALL INSTRUCTIONS GOES HERE!!)
+(!!EXTRNL CODE FOR EXECUTING ALL INSTRUCTIONS GOES HERE!!)
 --------------------------=#
 
 function load(sX, sY)
@@ -13,7 +13,7 @@ function star(sX, sY)
 end
 
 function and(sX, sY)
- println("anding")
+ println("anding") #Debug/test print
 end
 
 function or(sX, sY)
@@ -21,12 +21,12 @@ end
 function xor()
 end
 function add(sX, sY)
-println("adding s1,s2")
+println("adding s1,s2") #Debug print
 end
 function addcy(sX, sY)
 end
 function sub(sX, sY)
-println("subbing")
+println("subbing") #Debug print
 end
 function subcy(sX, sY)
 end
@@ -69,6 +69,7 @@ end
 
 
 function output()
+println("Variable goes here") #debug print
 end
 function outputk()
 end
@@ -80,7 +81,7 @@ end
 jumped = false
 
 function jump(label)
-global jumped = true
+global jumped = true #sets the jump boolean variable
 label = chomp(label)
   global PC = labelDict["$(label)"] #Change the program counter to point to label
 end
@@ -92,7 +93,7 @@ function thisReturn()
 end
 
 #=-------------------------------------
- END FUNCTION DECLARATION
+ END FUNCTION DECLARATION (END EXTRNL CODE)
  ------------------------------------=#
  #=-------------------------------------
   BEGIN ASSEMBLY PARSER
