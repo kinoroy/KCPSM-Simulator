@@ -2,7 +2,10 @@
 Created by: Kino Roy for CMPT 276, Assignment 1. =#
 module AssemblyParser #Module declaration temp patches warning bug: later to delete
 #= Begin Function Decs=#
-import functions #USING EXTRNL CODE
+#=---------------------------------------
+ALU FUNCTIONS ARE LOCATED IN FUNCTIONS.JL
+----------------------------------------=#
+import functions
 
 function input(sX)
   nIn = parse(UInt8,readline(STDIN)) #Reads in a number from 0 to 255
@@ -40,7 +43,7 @@ function thisReturn()
 end
 
 #=-------------------------------------
- END FUNCTION DECLARATION 
+ END FUNCTION DECLARATION
  ------------------------------------=#
  #=-------------------------------------
   BEGIN ASSEMBLY PARSER
