@@ -2,7 +2,7 @@
 Created by: Kino Roy for CMPT 276, Assignment 1. =#
 module AssemblyParser
 
-include("functions.jl")
+include("ALU_functions.jl")
 
 import .functions
 

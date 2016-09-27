@@ -2,13 +2,13 @@
 This is the CPU Simululator....
 IF YOU NEED TO EDIT ALU FUNCTIONS ONLY USE: "functions.jl".
 Functions which are not operations on registers or constants (like jump, return)
-are located here. 
+are located here.
 ----------------------------------------=#
 
 module CPU
 println("on")
 include("AssemblyParser.jl")
-include("functions.jl")
+include("ALU_functions.jl")
 import .AssemblyParser
 import .functions
 #=--------
