@@ -1,11 +1,8 @@
 #= This is the assembly language parser
 Created by: Kino Roy for CMPT 276, Assignment 1. =#
 module AssemblyParser #Module declaration temp patches warning bug: later to delete
-#=-------------------------
-BEGIN FUNCTION DECLARATION
-(!!EXTRNL CODE FOR EXECUTING ALL INSTRUCTIONS GOES HERE!!)
---------------------------=#
-import functions
+#= Begin Function Decs=#
+import functions #USING EXTRNL CODE
 
 function input(sX)
   nIn = parse(UInt8,readline(STDIN)) #Reads in a number from 0 to 255
@@ -43,7 +40,7 @@ function thisReturn()
 end
 
 #=-------------------------------------
- END FUNCTION DECLARATION (END EXTRNL CODE)
+ END FUNCTION DECLARATION 
  ------------------------------------=#
  #=-------------------------------------
   BEGIN ASSEMBLY PARSER

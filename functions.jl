@@ -1,3 +1,8 @@
+#=-------------------------
+BEGIN FUNCTION DECLARATION
+(!!EXTRNL CODE FOR EXECUTING ALL INSTRUCTIONS GOES HERE!!)
+--------------------------=#
+
 module functions
 
 function load(sX, sY)
