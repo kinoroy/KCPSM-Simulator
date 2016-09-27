@@ -5,7 +5,10 @@ module AssemblyParser #Module declaration temp patches warning bug: later to del
 #=---------------------------------------
 ALU FUNCTIONS ARE LOCATED IN FUNCTIONS.JL
 ----------------------------------------=#
-import functions
+
+include("functions.jl")
+
+import .functions
 
 function input(sX)
   nIn = parse(UInt8,readline(STDIN)) #Reads in a number from 0 to 255
@@ -54,15 +57,15 @@ Initializing data structures for holding data
 instructions = Array{AbstractString}(2047,4)
 labelDict = Dict() #Creates the dictionary for labels
 
-instructionsOneArgDict = Dict("SL0" => sl0, "SL1" => sl1, "SLX" => slx, "SLA" => sla
-, "RL" => rl, "SR0" => sr0, "SR1" => sr1, "SRX" => srx, "SRA" => sra, "RR" => rr, "JUMP" => jump
-, "CALL" => thisCall, "STORE" => store, "FETCH" => fetch, "INPUT" => input, "OUTPUT" => output
-, "RETURN" => thisReturn, "REGBANK" => regbank) #Creates dictionary of functions w/ one arguments
+instructionsOneArgDict = Dict("SL0" => functions.sl0, "SL1" => functions.sl1, "SLX" => functions.slx, "SLA" => functions.sla
+, "RL" => functions.rl, "SR0" => functions.sr0, "SR1" => functions.sr1, "SRX" => functions.srx, "SRA" => functions.sra, "RR" => functions.rr, "JUMP" => jump
+, "CALL" => thisCall, "STORE" => functions.store, "FETCH" => functions.fetch, "INPUT" => input, "OUTPUT" => output
+, "RETURN" => thisReturn, "REGBANK" => functions.regbank) #Creates dictionary of functions w/ one arguments
 
-instructionsTwoArgDict = Dict("LOAD" => load,"STAR" => star,"AND" => and,"OR" => or,"XOR" => xor,
-"ADD" => add,"ADDCY" => addcy,"SUB" => sub,"SUBCY" => subcy,"TEST" => test,"TESTCY" => testcy,
-"COMPARE" => compare,"INPUT" => input,"OUTPUT" => output,"OUTPUTK" => store,"STORE" => store,
-"FETCH" => fetch,"JUMP" => jump,"CALL" => thisCall) #Creates dictionary of functions w/ two arguments
+instructionsTwoArgDict = Dict("LOAD" => functions.load,"STAR" => functions.star,"AND" => functions.and,"OR" => functions.or,"XOR" => functions.xor,
+"ADD" => functions.add,"ADDCY" => functions.addcy,"SUB" => functions.sub,"SUBCY" => functions.subcy,"TEST" => functions.test,"TESTCY" => functions.testcy,
+"COMPARE" => functions.compare,"INPUT" => input,"OUTPUT" => output,"OUTPUTK" => outputk,"STORE" => functions.store,
+"FETCH" => functions.fetch,"JUMP" => jump,"CALL" => thisCall) #Creates dictionary of functions w/ two arguments
 
 PC = 1
 numJumps = 0
