@@ -3,6 +3,7 @@ BEGIN FUNCTION DECLARATION
 (!!EXTRNL CODE FOR EXECUTING ALL INSTRUCTIONS GOES HERE!!)
 --------------------------=#
 
+
 module functions
 
 function load(sX, sY)
@@ -64,7 +65,15 @@ function store(k)
 end
 function fetch(k)
 end
-#= EXPORT ------- =#
+
+
+#=---------------------
+END FUNCTION DECLARATIONS
+--------------------- =#
+
+#=-------------------------
+DONT EDIT BELOW THIS LINE
+-------------------------=#
 export load
 
 
@@ -123,4 +132,6 @@ export regbank
 export store
 
 export fetch
+
+
 end
