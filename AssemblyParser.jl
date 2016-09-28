@@ -25,6 +25,9 @@ lines = readlines(inStream) # Create an array with each element, an instruction
 counter = 1 #Start the counter
 
 for l in lines #Stepping through the lines
+    if(l[1] == ";") #Allows starting the file with comment only lines
+      continue
+    end
     l = split(l,r";")[1] #elimnate the comments (garbage)
     #Determines type of arguments in the line
 
