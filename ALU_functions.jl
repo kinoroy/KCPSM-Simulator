@@ -10,6 +10,7 @@ import .regbankA
 import .regbankB
 
 regbanks = Dict("A" => regbankA.registers, "B" => regbankB.registers)
+set = Dict("A" => regbankA.set,"B" => regbankB.set)
 currentRegbank = "A"
 
 function load(sX, sY)
@@ -28,15 +29,19 @@ function xor(sX, sY)
 end
 
 function add(sX, sY) # EXAMPLE ON HOW TO USE THE REGISTERS IN REGBANK MODULE
-println("adding s1,s2") #Debug/test print
-regbanks[currentRegbank][sX] = regbanks[currentRegbank][sX]+regbanks[currentRegbank][sY] #Adds register sX and sY and stores into sX
-println("now the val is: $(regbanks[currentRegbank][$(sX)])") #Test/Debug print
+#  println("adding $(regbanks[currentRegbank][sX])+$(regbanks[currentRegbank][sY])") #Debug/test print
+  set[currentRegbank](sX, regbanks[currentRegbank][sX]+regbanks[currentRegbank][sY]) #Adds register sX and sY and stores into sX
+#  println("now the val is: $(regbanks[currentRegbank][sX])") #Test/Debug print
+end
+
+function get(sK) #NOT AN ALU FUNCTION!
+  return regbanks[currentRegbank][sK]
 end
 
 function addcy(sX, sY)
 end
 function sub(sX, sY)
-println("subbing") #Debug/test print
+  println("subbing") #Debug/test print
 end
 function subcy(sX, sY)
 end
@@ -144,6 +149,5 @@ export regbank
 export store
 
 export fetch
-
 
 end

@@ -14,8 +14,8 @@ include("Stack.jl")
 import .AssemblyParser
 import .functions
 import .Stack
-import .regbankA
-import .regbankB
+#import .regbankA
+#import .regbankB
 
 #=-----------------------------------------
 CPU ON - Innitialize power state
@@ -64,8 +64,8 @@ function input(sX)
 end
 
 function output(sK,pp)
-  portNumber = Parse(Int,pp)
-  value_of_sK = regbankA.get(sK)
+  portNumber = parse(Int,pp)
+  value_of_sK = functions.get(sK)
   println("$(hex(portNumber,2)) $(hex(value_of_sK,2))") #Prints output of the format "portNumber registerValue"
 end
 
@@ -102,7 +102,7 @@ BEGIN EXECUTION OF PARSED ADDEMBLY CODE
 while PC<= size(instructions)[1] && numJumps<10 #Checks whether the Program Counter has reached the end of the program memory or the program has jumped to the same label 10 times
 
   currentInst = instructions[PC,2] #Gets the next instruction from the program memory
-
+#println("$(currentInst)") #Test/Debug print
   if isempty(currentInst) #Checks if there are no more instructions to execute
     break #End execution immediately
   end

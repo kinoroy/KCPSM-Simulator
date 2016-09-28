@@ -39,12 +39,12 @@ for l in lines #Stepping through the lines
   #CASE: "INST"
   if size(splitLine)[1] == 1
 
-    instructions[counter,2] = splitLine[1]
+    instructions[counter,2] = chomp(splitLine[1])
 
   #CASE: "LABEL + INST"
   elseif size(splitLine)[1] == 2 && contains(l,":")
     instructions[counter,1] = splitLine[1]
-    instructions[counter,2] = splitLine[2]
+    instructions[counter,2] = chomp(splitLine[2])
       #ADDS LABEL TO DICTIONARY
       labelDict["$(splitLine[1])"] = counter
 
@@ -52,7 +52,7 @@ for l in lines #Stepping through the lines
   #CASE: "INST + OP1"
   elseif size(splitLine)[1] == 2
     instructions[counter,2] = splitLine[1]
-    instructions[counter,3] = splitLine[2]
+    instructions[counter,3] = chomp(splitLine[2])
       #ADDS LABEL TO DICTIONARY
       labelDict["$(splitLine[1])"] = counter
 
@@ -60,7 +60,7 @@ for l in lines #Stepping through the lines
   elseif size(splitLine)[1] == 3 && contains(l,":")
     instructions[counter,1] = splitLine[1]
     instructions[counter,2] = splitLine[2]
-    instructions[counter,3] = splitLine[3]
+    instructions[counter,3] = chomp(splitLine[3])
       #ADDS LABEL TO DICTIONARY
       labelDict["$(splitLine[1])"] = counter
 
@@ -68,14 +68,14 @@ for l in lines #Stepping through the lines
   elseif size(splitLine)[1] == 3 && contains(l,",")
     instructions[counter,2] = splitLine[1]
     instructions[counter,3] = splitLine[2]
-    instructions[counter,4] = splitLine[3]
+    instructions[counter,4] = chomp(splitLine[3])
 
   #CASE: "LABEL + INST + OP1 + OP2"
   elseif size(splitLine)[1] == 4
   instructions[counter,1] = splitLine[1]
   instructions[counter,2] = splitLine[2]
   instructions[counter,3] = splitLine[3]
-  instructions[counter,4] = splitLine[4]
+  instructions[counter,4] = chomp(splitLine[4])
     #ADDS LABEL TO DICTIONARY
     labelDict["$(splitLine[1])"] = counter
   end
