@@ -3,8 +3,14 @@ BEGIN FUNCTION DECLARATION
 (!!EXTRNL CODE FOR EXECUTING ALL INSTRUCTIONS GOES HERE!!)
 --------------------------=#
 
-
 module functions
+
+include("Regbank.jl")
+import .regbankA
+import .regbankB
+
+regbanks = Dict("A" => regbankA.registers, "B" => regbankB.registers)
+currentRegbank = "A"
 
 function load(sX, sY)
 end
@@ -20,13 +26,17 @@ function or(sX, sY)
 end
 function xor(sX, sY)
 end
-function add(sX, sY)
-println("adding s1,s2") #Debug print
+
+function add(sX, sY) # EXAMPLE ON HOW TO USE THE REGISTERS IN REGBANK MODULE
+println("adding s1,s2") #Debug/test print
+regbanks[currentRegbank][sX] = regbanks[currentRegbank][sX]+regbanks[currentRegbank][sY] #Adds register sX and sY and stores into sX
+println("now the val is: $(regbanks[currentRegbank][$(sX)])") #Test/Debug print
 end
+
 function addcy(sX, sY)
 end
 function sub(sX, sY)
-println("subbing") #Debug print
+println("subbing") #Debug/test print
 end
 function subcy(sX, sY)
 end
@@ -59,7 +69,9 @@ function sra(sX)
 end
 function rr(sX)
 end
-function regbank(A::String)
+function regbank(new_RegBank::String)
+  println("changing RegBank to:$(new_RegBank)") #Test/Debug print
+  currentRegbank = new_RegBank
 end
 function store(k)
 end
