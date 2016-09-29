@@ -6,8 +6,10 @@ BEGIN FUNCTION DECLARATION
 module functions
 
 include("Regbank.jl")
+include("Flags.jl")
 import .regbankA
 import .regbankB
+import .Flags
 
 regbanks = Dict("A" => regbankA.registers, "B" => regbankB.registers)
 set = Dict("A" => regbankA.set,"B" => regbankB.set)
@@ -21,6 +23,13 @@ end
 
 function and(sX, sY)
  println("anding") #Debug/test print
+ set[currentRegbank](sX, regbanks[currentRegbank][sX] & regbanks[currentRegbank][sY] )
+
+ if regbanks[currentRegbank][sX] == 0
+   Flags.set("Z",true)
+end
+Flags.set("C",false)
+println("Z is now $(Flags.get("Z")) and C is now $(Flags.get("C"))")
 end
 
 function or(sX, sY)
