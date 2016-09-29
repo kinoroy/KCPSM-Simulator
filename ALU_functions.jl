@@ -95,13 +95,13 @@ function add(sX, sY) # EXAMPLE ON HOW TO USE THE REGISTERS IN REGBANK MODULE
 
 end
 
-function get(sK) #NOT AN ALU FUNCTION!
+function get(sK) #NOT AN ALU FUNCTION! DONT EDIT
   return regbanks[currentRegbank][sK]
 end
 
-#=function set(sK, value)
+function setReg(sX, value) #NOT AN ALU FUNCTION! DONT EDIT
   set[currentRegbank](sX, value)
-end=#
+end
 
 function addcy(sX, sY)
 
@@ -293,7 +293,7 @@ END FUNCTION DECLARATIONS
 #=-------------------------
 DONT EDIT BELOW THIS LINE
 -------------------------=#
-export set
+export setReg
 
 export load
 

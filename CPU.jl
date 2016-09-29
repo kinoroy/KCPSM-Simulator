@@ -63,7 +63,7 @@ end
 
 function input(sX)
   nIn = parse(UInt8,readline(STDIN)) #Reads in a number from 0 to 255 to write to the target register
-  #functions.set(sX,nIn)
+  functions.setReg(sX,nIn)
 end
 
 function output(sK,pp)
@@ -96,8 +96,8 @@ instructionsTwoArgDict = Dict("LOAD" => functions.load,"STAR" => functions.star,
 #=------------------------------------------
 BEGIN READING THE INPUT FILE OF INSTRUCTIONS
 --------------------------------------------=#
-#Runs the parser and returns a list of instructions 
-#for the program memory and a dictionary containing 
+#Runs the parser and returns a list of instructions
+#for the program memory and a dictionary containing
 #all labels and their locations in the program memory
 (instructions,labelDict) = AssemblyParser.Parse()
 
@@ -127,10 +127,10 @@ BEGIN EXECUTION OF PARSED ADDEMBLY CODE
       instructionsTwoArgDict["$(currentInst)"](firstArg,secondArg) #Call the function with two arguments
     end
 
-    if !jumped 
+    if !jumped
       PC+=1
     end #Increment the program counter if the last instruction executed is not a jump
-    
+
     jumped = false #"Jump" was not the last instruction
   end
   #=------------------------------
