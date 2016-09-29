@@ -50,7 +50,7 @@ function jump(label)
     if PC_new == PC_current
       global numJumps+=1 #The last instruction jumped to itself
     end
-    global PC= PC_new #Change the program coutner to jump to label
+    global PC = PC_new #Change the program coutner to jump to label
 end
 
 function thisCall()
@@ -100,7 +100,7 @@ BEGIN READING THE INPUT FILE OF INSTRUCTIONS
 BEGIN EXECUTION OF PARSED ADDEMBLY CODE
 -----------------------------------------=#
 
-while PC<= size(instructions)[1] && numJumps<10 #Checks whether the Program Counter has reached the end of the program memory or the program has jumped to the same label 10 times
+while PC <= size(instructions)[1] && numJumps<10 #Checks whether the Program Counter has reached the end of the program memory or the program has jumped to the same label 10 times
 
   currentInst = instructions[PC,2] #Gets the next instruction from the program memory
 #println("$(currentInst)") #Test/Debug print
