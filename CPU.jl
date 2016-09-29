@@ -10,6 +10,7 @@ module CPU
 include("AssemblyParser.jl")
 include("ALU_functions.jl")
 include("Stack.jl")
+
 import .AssemblyParser
 import .functions
 import .Stack
@@ -20,8 +21,8 @@ CPU ON - Innitialize power state
 println("on") #Test/Debug print
 
 PC = 1 #"zero" the program counter (counting starts at 1 in Julia)
-Z = false #The zero flag is initialized to false
-C = false #The carry flag is initialized to flase
+ #The zero flag is initialized to false by Flags.jl
+ #The carry flag is initialized to false by Flags.jl
 functions.regbank("A") #Register bank ‘A’ is selected and therefore ‘A’ is the default bank of registers.
 
 Stack.reset() #= pointer in the program counter stack is reset to ensure that the program is able to execute programs
@@ -30,8 +31,8 @@ in which up to 30 nested subroutine calls can be made.=#
 #= ------------------------
 GLOBAL VARIABLE DECLARATION
 ----------------------------=#
-numJumps = 0 #The number of recursive jump calls to the same address
-jumped = false #Is true if "jump" is the last instruction executed
+global numJumps = 0 #The number of recursive jump calls to the same address
+global jumped = false #Is true if "jump" is the last instruction executed
 labelDict = Dict() #Dictionary which, maps labels to their address in the program memory
 
 #=-----------------------------------------------
@@ -40,10 +41,39 @@ FUNCTION DECLATATION:
 ------------------------------------------------=#
 
 function jump(label)
+  global jumped
   jumped = true #The last instruction was a jump instruction
   label = chomp(label) #Cleans up garbage
   PC_current = PC
   PC_new = labelDict["$(label)"] #Change the program counter to point to label
+  if PC_new == PC_current
+    global numJumps+=1 #The last instruction jumped to itself
+  end
+  global PC = PC_new #Change the program coutner to jump to label
+end
+
+function jump(inCondition, label)
+  global jumped
+  conditions = Dict("Z" => functions.getFlag("Z"), "NZ" => !functions.getFlag("Z")
+  , "C" => functions.getFlag("C"), "NC" => !functions.getFlag("C"))
+
+  if conditions[inCondition]
+    jumped = true #The last instruction was a jump instruction
+    label = chomp(label) #Cleans up garbage
+    PC_current = PC
+    PC_new = labelDict["$(label)"] #Change the program counter to point to label
+    global PC = PC_new #Change the program coutner to jump to label
+  else
+    #Do nothing, the CPU will increment the PC
+  end
+end
+
+function jumpAt(sX, sY)
+  newAddr = ((UInt8(functions.get(sX)) & (0x0F)) & (0x100)) + UInt8(functions.get(sY))
+  jumped = true #The last instruction was a jump instruction
+  label = chomp(label) #Cleans up garbage
+  PC_current = PC
+  PC_new = newAddr #Change the program counter to point to label
   if PC_new == PC_current
     global numJumps+=1 #The last instruction jumped to itself
   end
@@ -59,6 +89,7 @@ function thisReturn()
 end
 
 function input(sX)
+  println("Type a number between 0-255: I'll wait...") #Test/debug print
   nIn = parse(UInt8,readline(STDIN)) #Reads in a number from 0 to 255 to write to the target register
   functions.setReg(sX,nIn)
 end
@@ -88,7 +119,7 @@ instructionsOneArgDict = Dict("SL0" => functions.sl0, "SL1" => functions.sl1, "S
 instructionsTwoArgDict = Dict("LOAD" => functions.load,"STAR" => functions.star,"AND" => functions.and,"OR" => functions.or,"XOR" => functions.xor,
 "ADD" => functions.add,"ADDCY" => functions.addcy,"SUB" => functions.sub,"SUBCY" => functions.subcy,"TEST" => functions.test,"TESTCY" => functions.testcy,
 "COMPARE" => functions.compare,"INPUT" => input,"OUTPUT" => output,"OUTPUTK" => outputk,"STORE" => functions.store,
-"FETCH" => functions.fetch,"JUMP" => jump,"CALL" => thisCall) #Creates dictionary of functions w/ two arguments
+"FETCH" => functions.fetch,"JUMP" => jump, "JUMP@" => jumpAt, "CALL" => thisCall) #Creates dictionary of functions w/ two arguments
 
 #=------------------------------------------
 BEGIN READING THE INPUT FILE OF INSTRUCTIONS

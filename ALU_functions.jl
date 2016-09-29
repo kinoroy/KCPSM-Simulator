@@ -17,6 +17,17 @@ global currentRegbank = "A"
 
 function load(sX, sY)
 
+  secondOpRegister = false
+
+  if (haskey(regbanks[currentRegbank],sY))
+  	secondOpRegister = true
+  end
+
+  if secondOpRegister
+
+  else
+
+  end
 
 
 #flags
@@ -28,37 +39,70 @@ end
 
 function star(sX, sY)
 
+  secondOpRegister = false
+  if (haskey(regbanks[currentRegbank],sY)) #Checks if the 2nd arg is a known register
+  	secondOpRegister = true
+  end
 
+#Value from REGISTER in the active bank (sY) moves into register in the non active bank (sX)
+  if currentRegbank == "A" & !secondOpRegister
+    set["B"](sX, regbanks[currentRegbank][sY])
+  elseif !secondOpRegister
+    set["A"](sX, regbanks[currentRegbank][sY])
+  end
+#Value from CONSTANT moves into register in the non active bank (sX)
+  if currentRegbank == "A" & secondOpRegister
+    set["B"](sX, parse(UInt8,readline(sY)))
+  elseif secondOpRegister
+    set["A"](sX, parse(UInt8,readline(sY)))
+  end
 
   #flags
 
-
+    #=FLAGS ARE NOT AFFECTED BY THIS FUNCTION=#
 
 
 end
 
 function and(sX, sY)
  println("anding") #Debug/test print
- set[currentRegbank](sX, regbanks[currentRegbank][sX] & regbanks[currentRegbank][sY] )
+
+ secondOpRegister = false
+
+ if (haskey(regbanks[currentRegbank],sY))
+ 	secondOpRegister = true
+ end
+
+ if secondOpRegister
+   set[currentRegbank](sX, regbanks[currentRegbank][sX] & regbanks[currentRegbank][sY] )
+ else
+   set[currentRegbank](sX, regbanks[currentRegbank][sX] & parse(UInt8, sY) )
+ end
+
 
  if regbanks[currentRegbank][sX] == 0
    Flags.set("Z",true)
 end
+
+#Flags
+
 Flags.set("C",false)
 println("Z is now $(Flags.get("Z")) and C is now $(Flags.get("C"))")
 end
 
 function or(sX, sY)
 
-  set[currentRegbank](sX, regbanks[currentRegbank][sX] | regbanks[currentRegbank][sY] )
-
 secondOpRegister = false
 
-if(haskey(regbanks[currentRegbank],sY))
+if (haskey(regbanks[currentRegbank],sY))
 	secondOpRegister = true
 end
 
-
+if secondOpRegister
+  set[currentRegbank](sX, regbanks[currentRegbank][sX] | regbanks[currentRegbank][sY] )
+else
+    set[currentRegbank](sX, regbanks[currentRegbank][sX] | parse(UInt8,sY) )
+end
 
 
   #Flags
@@ -71,6 +115,17 @@ end
 
 function xor(sX, sY)
 
+  secondOpRegister = false
+
+  if (haskey(regbanks[currentRegbank],sY))
+  	secondOpRegister = true
+  end
+
+  if secondOpRegister
+    set[currentRegbank](sX, regbanks[currentRegbank][sX] $ regbanks[currentRegbank][sY] )
+  else
+      set[currentRegbank](sX, regbanks[currentRegbank][sX] $ parse(UInt8,sY) )
+  end
 
   #Flags
   if regbanks[currentRegbank][sX] == 0
@@ -81,17 +136,24 @@ end
 
 
 function add(sX, sY) # EXAMPLE ON HOW TO USE THE REGISTERS IN REGBANK MODULE
-#  println("adding $(regbanks[currentRegbank][sX])+$(regbanks[currentRegbank][sY])") #Debug/test print
-  set[currentRegbank](sX, regbanks[currentRegbank][sX]+regbanks[currentRegbank][sY]) #Adds register sX and sY and stores into sX
-#  println("now the val is: $(regbanks[currentRegbank][sX])") #Test/Debug print
 
+secondOpRegister = false
+
+if (haskey(regbanks[currentRegbank],sY))
+	secondOpRegister = true
+end
+
+if secondOpRegister
+  set[currentRegbank](sX, regbanks[currentRegbank][sX] + regbanks[currentRegbank][sY] )
+else
+    set[currentRegbank](sX, regbanks[currentRegbank][sX] + parse(UInt8,sY) )
+end
 
 #flags
   if regbanks[currentRegbank][sX] > 255
 	Flags.set("Z", true)
 	end
 
-#
 
 end
 
@@ -104,8 +166,21 @@ function setReg(sX, value) #NOT AN ALU FUNCTION! DONT EDIT
 end
 
 function addcy(sX, sY)
+  C = 0  #Local variable C, not to be confused with global flag C
+  if Flags.get("C")
+    C = 1
+  end
+  secondOpRegister = false
 
+  if (haskey(regbanks[currentRegbank],sY))
+  	secondOpRegister = true
+  end
 
+  if secondOpRegister
+    set[currentRegbank](sX, regbanks[currentRegbank][sX] + regbanks[currentRegbank][sY] + C)
+  else
+      set[currentRegbank](sX, regbanks[currentRegbank][sX] + parse(UInt8,sY) + C)
+  end
 
   #flags
 
@@ -114,9 +189,18 @@ function addcy(sX, sY)
 
 end
 function sub(sX, sY)
-  println("subbing") #Debug/test print
 
+  secondOpRegister = false
 
+  if (haskey(regbanks[currentRegbank],sY))
+  	secondOpRegister = true
+  end
+
+  if secondOpRegister
+    set[currentRegbank](sX, regbanks[currentRegbank][sX] - regbanks[currentRegbank][sY] )
+  else
+      set[currentRegbank](sX, regbanks[currentRegbank][sX] - parse(UInt8,sY) )
+  end
 
   #flags
 
@@ -125,8 +209,22 @@ function sub(sX, sY)
 
 end
 function subcy(sX, sY)
+  C = 0 #Local variable C, not to be confused with C the global flag
+  if Flags.get("C")
+    C = 1
+  end
 
+  secondOpRegister = false
 
+  if (haskey(regbanks[currentRegbank],sY))
+  	secondOpRegister = true
+  end
+
+  if secondOpRegister
+    set[currentRegbank](sX, regbanks[currentRegbank][sX] - regbanks[currentRegbank][sY] -C )
+  else
+      set[currentRegbank](sX, regbanks[currentRegbank][sX] - parse(UInt8,sY) - C)
+  end
 
   #flags
 
@@ -281,11 +379,14 @@ function regbank(new_RegBank::AbstractString)
   currentRegbank = new_RegBank
   println("Regbank is now: $(currentRegbank)")
 end
-function store(k)
+function store(k) #This function interacts with the scratch pad - hold off on writing until SP complete
 end
-function fetch(k)
+function fetch(k) #This function interacts with the scratch pad - hold off on writing until SP complete
 end
 
+function getFlag(flag)
+  return Flags.get(flag)
+end
 
 #=---------------------
 END FUNCTION DECLARATIONS
