@@ -63,7 +63,6 @@ end
 Flags.set("C", false)
 end
 
-end
 
 function add(sX, sY) # EXAMPLE ON HOW TO USE THE REGISTERS IN REGBANK MODULE
 #  println("adding $(regbanks[currentRegbank][sX])+$(regbanks[currentRegbank][sY])") #Debug/test print
