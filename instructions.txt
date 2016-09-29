@@ -1,3 +1,1 @@
 AND S0, S1
-ADD S0, S1
-OUTPUT S0, 1

@@ -61,7 +61,7 @@ end
 
 function input(sX)
   nIn = parse(UInt8,readline(STDIN)) #Reads in a number from 0 to 255 to write to the target register
-  functions.set(sX,nIn)
+  #functions.set(sX,nIn)
 end
 
 function output(sK,pp)

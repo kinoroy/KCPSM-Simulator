@@ -1,7 +1,7 @@
 #=---------
 REGBANK A
 ----------=#
-module regbankA 
+module regbankA
 #=----------------------------
 Initialize registers to zero
 -----------------------------=#

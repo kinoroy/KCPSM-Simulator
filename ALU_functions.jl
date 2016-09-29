@@ -47,9 +47,9 @@ function get(sK) #NOT AN ALU FUNCTION!
   return regbanks[currentRegbank][sK]
 end
 
-function set(sK, value)
+#=function set(sK, value)
   set[currentRegbank](sX, value)
-end
+end=#
 
 function addcy(sX, sY)
 end
@@ -105,6 +105,8 @@ END FUNCTION DECLARATIONS
 #=-------------------------
 DONT EDIT BELOW THIS LINE
 -------------------------=#
+export set
+
 export load
 
 
