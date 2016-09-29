@@ -47,6 +47,10 @@ function get(sK) #NOT AN ALU FUNCTION!
   return regbanks[currentRegbank][sK]
 end
 
+function set(sK, value)
+  set[currentRegbank](sX, value)
+end
+
 function addcy(sX, sY)
 end
 function sub(sX, sY)
