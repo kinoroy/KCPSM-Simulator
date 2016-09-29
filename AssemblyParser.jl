@@ -20,7 +20,7 @@ close(inStream)
 
 counter = 1 #Start the counter
 
-for l in lines #Stepping through the lines
+for l in lines
   if(l[1] == ";") #Allows starting the file with comment only lines
     continue
   end
@@ -40,24 +40,24 @@ for l in lines #Stepping through the lines
   elseif size(splitLine)[1] == 2 && contains(l,":")
     instructions[counter,1] = splitLine[1]
     instructions[counter,2] = chomp(splitLine[2])
-      #ADDS LABEL TO DICTIONARY
-      labelDict["$(splitLine[1])"] = counter
+    #ADDS LABEL TO DICTIONARY
+    labelDict["$(splitLine[1])"] = counter
 
 
   #CASE: "INST + OP1"
   elseif size(splitLine)[1] == 2
     instructions[counter,2] = splitLine[1]
     instructions[counter,3] = chomp(splitLine[2])
-      #ADDS LABEL TO DICTIONARY
-      labelDict["$(splitLine[1])"] = counter
+    #ADDS LABEL TO DICTIONARY
+    labelDict["$(splitLine[1])"] = counter
 
   #CASE: "LABEL + INST + OP1"
   elseif size(splitLine)[1] == 3 && contains(l,":")
     instructions[counter,1] = splitLine[1]
     instructions[counter,2] = splitLine[2]
     instructions[counter,3] = chomp(splitLine[3])
-      #ADDS LABEL TO DICTIONARY
-      labelDict["$(splitLine[1])"] = counter
+    #ADDS LABEL TO DICTIONARY
+    labelDict["$(splitLine[1])"] = counter
 
   #CASE: "INST + OP1 + OP2"
   elseif size(splitLine)[1] == 3 && contains(l,",")
@@ -67,10 +67,10 @@ for l in lines #Stepping through the lines
 
   #CASE: "LABEL + INST + OP1 + OP2"
   elseif size(splitLine)[1] == 4
-  instructions[counter,1] = splitLine[1]
-  instructions[counter,2] = splitLine[2]
-  instructions[counter,3] = splitLine[3]
-  instructions[counter,4] = chomp(splitLine[4])
+    instructions[counter,1] = splitLine[1]
+    instructions[counter,2] = splitLine[2]
+    instructions[counter,3] = splitLine[3]
+    instructions[counter,4] = chomp(splitLine[4])
     #ADDS LABEL TO DICTIONARY
     labelDict["$(splitLine[1])"] = counter
   end
