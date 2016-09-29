@@ -33,6 +33,9 @@ println("Z is now $(Flags.get("Z")) and C is now $(Flags.get("C"))")
 end
 
 function or(sX, sY)
+
+  set[currentRegbank](sX, regbanks[currentRegbank][sX] | regbanks[currentRegbank][sY] )
+
 secondOpRegister = false
 
 if(haskey(regbanks[currentRegbank],sY))
@@ -41,10 +44,11 @@ end
 
 
 
+
   #Flags
   if regbanks[currentRegbank][sX] == 0
 	Flags.set("Z", true)
-end
+  end
 Flags.set("C", false)
 end
 
