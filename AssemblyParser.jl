@@ -2,12 +2,7 @@
 Created by: Kino Roy for CMPT 276, Assignment 1. =#
 module AssemblyParser
 
-include("ALU_functions.jl")
-
-import .functions
-
 function Parse()
-
 #=-----------------------------------------
 Initializing data structures for holding data
 ------------------------------------------=#
@@ -21,6 +16,7 @@ BEGIN FILE READING
 
 inStream = open("instructions.txt") #Open the input file and set the input stream
 lines = readlines(inStream) # Create an array with each element, an instruction
+close(inStream)
 
 counter = 1 #Start the counter
 
@@ -81,7 +77,7 @@ for l in lines #Stepping through the lines
 
    counter += 1
 end
-close(inStream)
+
 #=-----------
  END READING
  -----------=#
