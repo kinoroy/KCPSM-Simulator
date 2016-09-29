@@ -16,9 +16,25 @@ set = Dict("A" => regbankA.set,"B" => regbankB.set)
 currentRegbank = "A"
 
 function load(sX, sY)
+
+
+
+#flags
+
+
+
+
 end
 
 function star(sX, sY)
+
+
+
+  #flags
+
+
+
+
 end
 
 function and(sX, sY)
@@ -88,41 +104,177 @@ end
 end=#
 
 function addcy(sX, sY)
+
+
+
+  #flags
+
+
+
+
 end
 function sub(sX, sY)
   println("subbing") #Debug/test print
+
+
+
+  #flags
+
+
+
+
 end
 function subcy(sX, sY)
+
+
+
+  #flags
+
+
+
+
 end
 function test(sX, sY)
   print("test")
+
+
+
+  #flags
+
+
+
+
 end
 function testcy(sX, sY)
+
+
+
+  #flags
+
+
+
+
 end
 function compare(sX, sY)
+
+
+
+  #flags
+
+
+
+
 end
 function comparecy(sX, sY)
+
+
+
+  #flags
+
+
+
+
 end
 function sl0(sX)
+
+
+
+  #flags
+
+
+
+
 end
 function sl1(sX)
+
+
+
+  #flags
+
+
+
+
 end
 function slx(sX)
+
+
+
+  #flags
+
+
+
+
 end
 function sla(sX)
+
+
+
+  #flags
+
+
+
+
 end
 function rl(sX)
 
+
+
+  #flags
+
+
+
+
+
 end
 function sr0(sX)
+
+
+
+  #flags
+
+
+
+
 end
 function sr1(sX)
+
+
+
+  #flags
+
+
+
+
 end
 function srx(sX)
+
+
+
+  #flags
+
+
+
+
 end
 function sra(sX)
+
+
+
+  #flags
+
+
+
+
 end
 function rr(sX)
+
+
+
+  #flags
+
+
+
+
 end
 function regbank(new_RegBank::AbstractString)
   println("changing RegBank to:$(new_RegBank)") #Test/Debug print
