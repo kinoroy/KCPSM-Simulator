@@ -45,18 +45,20 @@ FUNCTION DECLATATION:
 function jump(label)
   jumped = true #The last instruction was a jump instruction
   label = chomp(label) #
-    PC_current = PC
-    PC_new = labelDict["$(label)"] #Change the program counter to point to label
-    if PC_new == PC_current
-      global numJumps+=1 #The last instruction jumped to itself
-    end
-    global PC = PC_new #Change the program coutner to jump to label
+  PC_current = PC
+  PC_new = labelDict["$(label)"] #Change the program counter to point to label
+  if PC_new == PC_current
+    global numJumps+=1 #The last instruction jumped to itself
+  end
+  global PC = PC_new #Change the program coutner to jump to label
 end
 
 function thisCall()
+  Stack.push(PC_current)
 end
 
 function thisReturn()
+  Stack.pop()
 end
 
 function input(sX)
@@ -94,52 +96,50 @@ instructionsTwoArgDict = Dict("LOAD" => functions.load,"STAR" => functions.star,
 #=------------------------------------------
 BEGIN READING THE INPUT FILE OF INSTRUCTIONS
 --------------------------------------------=#
-(instructions,labelDict) = AssemblyParser.Parse() #Runs the parser and returns a list of instructions for the program memory and a dictionary containing all labels and their locations in the program memory
+#Runs the parser and returns a list of instructions 
+#for the program memory and a dictionary containing 
+#all labels and their locations in the program memory
+(instructions,labelDict) = AssemblyParser.Parse()
 
 #=----------------------------------------
 BEGIN EXECUTION OF PARSED ADDEMBLY CODE
 -----------------------------------------=#
 
-while PC <= size(instructions)[1] && numJumps<10 #Checks whether the Program Counter has reached the end of the program memory or the program has jumped to the same label 10 times
+  while PC <= size(instructions)[1] && numJumps<10 #Checks whether the Program Counter has reached the end of the program memory or the program has jumped to the same label 10 times
+    currentInst = instructions[PC,2] #Gets the next instruction from the program memory
 
-  currentInst = instructions[PC,2] #Gets the next instruction from the program memory
-#println("$(currentInst)") #Test/Debug print
-  if isempty(currentInst) #Checks if there are no more instructions to execute
-    break #End execution immediately
+    # Is this redundant?
+    if isempty(currentInst) #Checks if there are no more instructions to execute
+      break #End execution immediately
+    end
+
+    firstArg = instructions[PC,3] #Gets the first argument of the current instruction(might be empty string)
+    secondArg = instructions[PC,4] #Gets the second argument of the current instruction(might be empty string)
+
+    hasArg1 = !isempty(firstArg) #Fails on first argument being empty
+    hasArg2 = !isempty(secondArg) #Fails on the second argument being empty
+
+    if hasArg1 == false && hasArg2 == false #1st and 2nd arguments are empty
+      thisReturn() #Return is the only function which can be called with no arguments
+    elseif hasArg1 == true && hasArg2 == false #1st argument is non empty, 2nd is empty
+      instructionsOneArgDict["$(currentInst)"](firstArg) #Call the fucntion with one argument
+    elseif hasArg1 == true && hasArg2 == true #1st argument is non empty, 2nd arument is non empty
+      instructionsTwoArgDict["$(currentInst)"](firstArg,secondArg) #Call the function with two arguments
+    end
+
+    if !jumped 
+      PC+=1
+    end #Increment the program counter if the last instruction executed is not a jump
+    
+    jumped = false #"Jump" was not the last instruction
   end
+  #=------------------------------
+  END EXECUTION OF ASSEMBLY CODE
+  ------------------------------=#
+  #=------------
+  CPU OFF
+  ------------=#
 
-  firstArg = instructions[PC,3] #Gets the first argument of the current instruction(might be empty string)
-  secondArg = instructions[PC,4] #Gets the second argument of the current instruction(might be empty string)
-
-  hasArg1 = false; #Fails on first argument being empty
-  hasArg2 = false; #Fails on the second argument being empty
-
-  if !isempty(firstArg) #Checks if 1st argument is non empty
-    hasArg1 = true
-  end
-  if !isempty(secondArg) #Checks if 2nd argument is non empty
-    hasArg2 = true
-
-  end
-
-  if hasArg1 == false && hasArg2 == false #1st and 2nd arguments are empty
-    thisReturn() #Return is the only function which can be called with no arguments
-  elseif hasArg1 == true && hasArg2 == false #1st argument is non empty, 2nd is empty
-    instructionsOneArgDict["$(currentInst)"](firstArg) #Call the fucntion with one argument
-  elseif hasArg1 == true && hasArg2 == true #1st argument is non empty, 2nd arument is non empty
-    instructionsTwoArgDict["$(currentInst)"](firstArg,secondArg) #Call the function with two arguments
-  end
-
-if !jumped PC+=1 end #Increment the program counter if the last instruction executed is not a jump
-jumped = false #"Jump" was not the last instruction
-end
-#=------------------------------
-END EXECUTION OF ASSEMBLY CODE
-------------------------------=#
-#=------------
-CPU OFF
-------------=#
-
-println("off") #Test/Debug print
+  println("off") #Test/Debug print
 
 end
