@@ -33,14 +33,47 @@ println("Z is now $(Flags.get("Z")) and C is now $(Flags.get("C"))")
 end
 
 function or(sX, sY)
+secondOpRegister = false
+
+if(haskey(regbanks[currentRegbank],sY))
+	secondOpRegister = true
 end
+
+
+
+  #Flags
+  if regbanks[currentRegbank][sX] == 0
+	Flags.set("Z", true)
+end
+Flags.set("C", false)
+end
+
+
 function xor(sX, sY)
+
+
+  #Flags
+  if regbanks[currentRegbank][sX] == 0
+	Flags.set("Z", true)
+end
+Flags.set("C", false)
+end
+
 end
 
 function add(sX, sY) # EXAMPLE ON HOW TO USE THE REGISTERS IN REGBANK MODULE
 #  println("adding $(regbanks[currentRegbank][sX])+$(regbanks[currentRegbank][sY])") #Debug/test print
   set[currentRegbank](sX, regbanks[currentRegbank][sX]+regbanks[currentRegbank][sY]) #Adds register sX and sY and stores into sX
 #  println("now the val is: $(regbanks[currentRegbank][sX])") #Test/Debug print
+
+
+#flags
+  if regbanks[currentRegbank][sX] > 255
+	Flags.set("Z", true)
+	end
+
+#
+
 end
 
 function get(sK) #NOT AN ALU FUNCTION!
