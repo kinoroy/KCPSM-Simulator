@@ -1,5 +1,5 @@
 #=--------------------------------------
-This is the CPU Simululator....
+This is the CPU Simululator....RUN THIS FILE
 IF YOU NEED TO EDIT ALU FUNCTIONS ONLY USE: "functions.jl".
 Functions which are not operations on registers or constants (like jump, return)
 are located here.
@@ -10,12 +10,9 @@ module CPU
 include("AssemblyParser.jl")
 include("ALU_functions.jl")
 include("Stack.jl")
-#include("Regbank.jl")
 import .AssemblyParser
 import .functions
 import .Stack
-#import .regbankA
-#import .regbankB
 
 #=-----------------------------------------
 CPU ON - Innitialize power state
@@ -44,7 +41,7 @@ FUNCTION DECLATATION:
 
 function jump(label)
   jumped = true #The last instruction was a jump instruction
-  label = chomp(label) #
+  label = chomp(label) #Cleans up garbage
   PC_current = PC
   PC_new = labelDict["$(label)"] #Change the program counter to point to label
   if PC_new == PC_current
@@ -99,7 +96,7 @@ BEGIN READING THE INPUT FILE OF INSTRUCTIONS
 #Runs the parser and returns a list of instructions
 #for the program memory and a dictionary containing
 #all labels and their locations in the program memory
-(instructions,labelDict) = AssemblyParser.Parse()
+(instructions,labelDict) = AssemblyParser.Parse() #Note that this is the function Parse from "AssemblyParser.jl", NOT the built in Julia function "parse()"
 
 #=----------------------------------------
 BEGIN EXECUTION OF PARSED ADDEMBLY CODE

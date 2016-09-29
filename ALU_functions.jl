@@ -13,7 +13,7 @@ import .Flags
 
 regbanks = Dict("A" => regbankA.registers, "B" => regbankB.registers)
 set = Dict("A" => regbankA.set,"B" => regbankB.set)
-currentRegbank = "A"
+global currentRegbank = "A"
 
 function load(sX, sY)
 
@@ -277,8 +277,9 @@ function rr(sX)
 
 end
 function regbank(new_RegBank::AbstractString)
-  println("changing RegBank to:$(new_RegBank)") #Test/Debug print
+  global currentRegbank
   currentRegbank = new_RegBank
+  println("Regbank is now: $(currentRegbank)")
 end
 function store(k)
 end
