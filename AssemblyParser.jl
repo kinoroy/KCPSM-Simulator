@@ -89,7 +89,6 @@ close(inStream)
 return instructions,labelDict
 end
 end
-export Parse
 #=------------
 END ASSEMBLY PARSER
 -------------=#

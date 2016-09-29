@@ -88,7 +88,7 @@ function sra(sX)
 end
 function rr(sX)
 end
-function regbank(new_RegBank::String)
+function regbank(new_RegBank::AbstractString)
   println("changing RegBank to:$(new_RegBank)") #Test/Debug print
   currentRegbank = new_RegBank
 end
