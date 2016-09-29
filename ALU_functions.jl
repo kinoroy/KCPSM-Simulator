@@ -46,6 +46,7 @@ end
 function subcy(sX, sY)
 end
 function test(sX, sY)
+  print("test")
 end
 function testcy(sX, sY)
 end
