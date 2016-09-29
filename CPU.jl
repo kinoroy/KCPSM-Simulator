@@ -69,10 +69,11 @@ function jump(inCondition, label)
 end
 
 function jumpAt(sX, sY)
-  newAddr = ((UInt8(functions.get(sX)) & (0x0F)) & (0x100)) + UInt8(functions.get(sY))
+  global jumped
+  newAddr = ((UInt8(functions.get(sX)) & (0x0F)) * (0x100)) + UInt8(functions.get(sY))
   jumped = true #The last instruction was a jump instruction
-  label = chomp(label) #Cleans up garbage
   PC_current = PC
+  println("The address is:$(newAddr)")
   PC_new = newAddr #Change the program counter to point to label
   if PC_new == PC_current
     global numJumps+=1 #The last instruction jumped to itself
