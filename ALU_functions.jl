@@ -79,15 +79,12 @@ function and(sX, sY)
    set[currentRegbank](sX, regbanks[currentRegbank][sX] & parse(UInt8, sY) )
  end
 
-
+#Flags
  if regbanks[currentRegbank][sX] == 0
    Flags.set("Z",true)
-end
-
-#Flags
-
-Flags.set("C",false)
-println("Z is now $(Flags.get("Z")) and C is now $(Flags.get("C"))")
+ end
+ Flags.set("C",false)
+#println("Z is now $(Flags.get("Z")) and C is now $(Flags.get("C"))")
 end
 
 function or(sX, sY)
@@ -107,9 +104,9 @@ end
 
   #Flags
   if regbanks[currentRegbank][sX] == 0
-	Flags.set("Z", true)
+	   Flags.set("Z", true)
   end
-Flags.set("C", false)
+  Flags.set("C", false)
 end
 
 
@@ -129,9 +126,9 @@ function xor(sX, sY)
 
   #Flags
   if regbanks[currentRegbank][sX] == 0
-	Flags.set("Z", true)
-end
-Flags.set("C", false)
+    Flags.set("Z", true)
+   end
+   Flags.set("C", false)
 end
 
 
@@ -149,12 +146,13 @@ else
     set[currentRegbank](sX, regbanks[currentRegbank][sX] + parse(UInt8,sY) )
 end
 
-#flags
-  if regbanks[currentRegbank][sX] > 255
-	Flags.set("Z", true)
+  #flags
+  if regbanks[currentRegbank][sX] == 0
+    Flags.set("Z", true)
 	end
-
-
+  if regbanks[currentRegbank][sX] > 255
+    Flags.set("C", true)
+  end
 end
 
 function get(sK) #NOT AN ALU FUNCTION! DONT EDIT
@@ -183,11 +181,12 @@ function addcy(sX, sY)
   end
 
   #flags
-
-
-
-
+  #The zero flag (Z) will be set if the 8-bit result returned to ‘sX’ is zero and the zero flag was set prior to the ADDCY instruction
+  if regbanks[currentRegbank][sX] < 255
+    Flags.set("C", true)
+  end
 end
+
 function sub(sX, sY)
 
   secondOpRegister = false
@@ -203,11 +202,14 @@ function sub(sX, sY)
   end
 
   #flags
-
-
-
-
+  if regbanks[currentRegbank][sX] == 0
+    Flags.set("Z", true)
+  end
+  if regbank[currentRegbank][sX] < 0
+    Flags.set("C", true)
+  end
 end
+
 function subcy(sX, sY)
   C = 0 #Local variable C, not to be confused with C the global flag
   if Flags.get("C")
@@ -227,11 +229,12 @@ function subcy(sX, sY)
   end
 
   #flags
-
-
-
-
+  #The zero flag (Z) will be set if the 8-bit result returned to ‘sX’ is zero and the zero flag was set prior to the SUBCY instruction.
+  if regbanks[currentRegbank][sX] < 0
+    Flags.set("C", true)
+  end
 end
+
 function test(sX, sY)
   print("test")
 
