@@ -70,11 +70,11 @@ end
 
 function jumpAt(sX, sY)
   global jumped
-  newAddr = ((UInt8(functions.get(sX)) & (0x0F)) * (0x100)) + UInt8(functions.get(sY))
+  newAddr = ((UInt8(functions.get(sX)) & (0x0F)) * (0x100)) + UInt8(functions.get(sY)) #New address is lower 4 bits of sX:sY
   jumped = true #The last instruction was a jump instruction
   PC_current = PC
   println("The address is:$(newAddr)")
-  PC_new = newAddr #Change the program counter to point to label
+  PC_new = newAddr #Change the program counter to point to new address
   if PC_new == PC_current
     global numJumps+=1 #The last instruction jumped to itself
   end
