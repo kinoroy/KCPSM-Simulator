@@ -76,9 +76,9 @@ function and(sX, sY)
  end
 
 #Flags
- if regbanks[currentRegbank][sX] == 0
-   Flags.set("Z",true)
- end
+  if regbanks[currentRegbank][sX] == 0
+    Flags.set("Z",true)
+  end
  Flags.set("C",false)
 #println("Z is now $(Flags.get("Z")) and C is now $(Flags.get("C"))")
 end
@@ -123,8 +123,8 @@ function xor(sX, sY)
   #Flags
   if regbanks[currentRegbank][sX] == 0
     Flags.set("Z", true)
-   end
-   Flags.set("C", false)
+  end
+  Flags.set("C", false)
 end
 
 
@@ -164,6 +164,11 @@ function addcy(sX, sY)
   if Flags.get("C")
     C = 1
   end
+
+  if Flags.get("Z")
+    zPrior = true
+  end
+
   secondOpRegister = false
 
   if (haskey(regbanks[currentRegbank],sY))
@@ -178,6 +183,9 @@ function addcy(sX, sY)
 
   #flags
   #The zero flag (Z) will be set if the 8-bit result returned to ‘sX’ is zero and the zero flag was set prior to the ADDCY instruction
+  if (regbanks[currentRegbank][sX] == 0) && (zPrior == true)
+    Flags.set("Z",true)
+  end
   if regbanks[currentRegbank][sX] < 255
     Flags.set("C", true)
   end
@@ -212,6 +220,10 @@ function subcy(sX, sY)
     C = 1
   end
 
+  if Flags.get("Z")
+    zPrior = true
+  end
+
   secondOpRegister = false
 
   if (haskey(regbanks[currentRegbank],sY))
@@ -226,6 +238,9 @@ function subcy(sX, sY)
 
   #flags
   #The zero flag (Z) will be set if the 8-bit result returned to ‘sX’ is zero and the zero flag was set prior to the SUBCY instruction.
+  if (regbanks[currentRegbank][sX] == 0) && (zPrior == true)
+    Flags.set("Z", true)
+  end
   if regbanks[currentRegbank][sX] < 0
     Flags.set("C", true)
   end
