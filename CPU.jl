@@ -96,14 +96,21 @@ function input(sX)
 end
 
 function output(sK,pp)
-  portNumber = parse(Int,pp)
+  secondOpRegister = (pp[1] == '(')
+
+  if secondOpRegister
+    portNumber = functions.get(pp[2:length(pp)-1])
+  else
+    portNumber = parse(Int,pp)
+  end
+
   value_of_sK = functions.get(sK)
   println("$(hex(portNumber,2)) $(hex(value_of_sK,2))") #Prints output of the format "portNumber registerValue"
 end
 
 function outputk(kk,p)
   portNumber = parse(Int,p)
-  value = kk
+  value = parse(Int,kk)
   println("$(hex(portNumber,2)) $(hex(value,2))") #Prints output of the format "portNumber Value"
 end
 
