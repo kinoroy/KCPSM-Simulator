@@ -41,13 +41,13 @@ function star(sX, sY)
   end
 
 #Value from REGISTER in the active bank (sY) moves into register in the non active bank (sX)
-  if currentRegbank == "A" & secondOpRegister
+  if (currentRegbank == "A") & secondOpRegister
     set["B"](sX, regbanks[currentRegbank][sY])
   elseif secondOpRegister
     set["A"](sX, regbanks[currentRegbank][sY])
   end
 #Value from CONSTANT moves into register in the non active bank (sX)
-  if currentRegbank == "A" & !secondOpRegister
+  if (currentRegbank == "A") & !secondOpRegister
     set["B"](sX, parse(UInt8, sY)) #sY is a constant here
   elseif !secondOpRegister
     set["A"](sX, parse(UInt8, sY)) #sY is a constant here
@@ -209,7 +209,7 @@ function sub(sX, sY)
   if regbanks[currentRegbank][sX] == 0
     Flags.set("Z", true)
   end
-  if regbank[currentRegbank][sX] < 0
+  if regbanks[currentRegbank][sX] < 0
     Flags.set("C", true)
   end
 end
@@ -529,7 +529,7 @@ function sr0(sX)
 end
 
 function sr1(sX)
-
+  local C
   B = bin(regbanks[currentRegbank][sX])
   C = B[length(B)] #Local variable C gets LSB
   B = B[1:length(B)-1] #Drops LSB
@@ -539,7 +539,7 @@ function sr1(sX)
   set[currentRegbank](sX, D) #Sets sX after sl0
 
     #flags
-  if C == 1
+  if !isa(C, Char) && C == 1
     Flags.set("C",true)
   else
     Flags.set("C",false)
