@@ -186,7 +186,7 @@ function addcy(sX, sY)
   if (regbanks[currentRegbank][sX] == 0) && (zPrior == true)
     Flags.set("Z",true)
   end
-  if regbanks[currentRegbank][sX] < 255
+  if regbanks[currentRegbank][sX] > 255
     Flags.set("C", true)
   end
 end
