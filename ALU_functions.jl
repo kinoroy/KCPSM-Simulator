@@ -200,16 +200,18 @@ function sub(sX, sY)
   end
 
   if secondOpRegister
-    set[currentRegbank](sX, regbanks[currentRegbank][sX] - regbanks[currentRegbank][sY] )
+    underflow = (regbanks[currentRegbank][sY] > regbanks[currentRegbank][sX]) #underflow
+    set[currentRegbank](sX, UInt8(regbanks[currentRegbank][sX]) - UInt8(regbanks[currentRegbank][sY]) )
   else
-      set[currentRegbank](sX, regbanks[currentRegbank][sX] - parse(UInt8,sY) )
+    underflow = (parse(UInt8,sY) > regbanks[currentRegbank][sX]) #underflow
+    set[currentRegbank](sX, UInt8(regbanks[currentRegbank][sX]) - UInt8(parse(UInt8,sY)) )
   end
 
   #flags
   if regbanks[currentRegbank][sX] == 0
     Flags.set("Z", true)
   end
-  if regbanks[currentRegbank][sX] < 0
+  if underflow
     Flags.set("C", true)
   end
 end
@@ -231,9 +233,11 @@ function subcy(sX, sY)
   end
 
   if secondOpRegister
-    set[currentRegbank](sX, regbanks[currentRegbank][sX] - regbanks[currentRegbank][sY] -C )
+      underflow = ((regbanks[currentRegbank][sY] + C) > regbanks[currentRegbank][sX] ) #underflow
+      set[currentRegbank](sX, UInt8(regbanks[currentRegbank][sX]) - UInt8(regbanks[currentRegbank][sY]) - UInt8(C) )
   else
-      set[currentRegbank](sX, regbanks[currentRegbank][sX] - parse(UInt8,sY) - C)
+      underflow = ((parse(UInt8,sY) + C) > regbanks[currentRegbank][sX]) #underflow
+      set[currentRegbank](sX, UInt8(regbanks[currentRegbank][sX]) - UInt8(parse(UInt8,sY)) - UInt8(C) )
   end
 
   #flags
@@ -261,7 +265,7 @@ function test(sX, sY)
   tempRes = regbanks[currentRegbank][sX] && parse(UInt8,sY)
   end
 
-  testString = bin(tempRes)
+  testString = bin(tempRes,8)
   numberOf1s = length(split(tempString,"1")) - 1
   oddNum1s = isodd(numberOf1s)
 
@@ -290,7 +294,7 @@ function testcy(sX, sY)
   tempRes = regbanks[currentRegbank][sX] && parse(UInt8,sY)
   end
 
-  testString = bin(tempRes)
+  testString = bin(tempRes,8)
   numberOf1s = length(split(tempString,"1")) - 1
   oddNum1s = isodd(numberOf1s)
 
@@ -383,8 +387,8 @@ function comparecy(sX, sY)
 end
 function sl0(sX)
 
-B = bin(regbanks[currentRegbank][sX])
-C = B[1] #Local variable C gets MSB
+B = bin(regbanks[currentRegbank][sX],8)
+C = parse(Int,B[1]) #Local variable C gets MSB
 B = B[2:length(B)] #Drops MSB
 B = "$(B)0" #Adds 0 to LSB
 B = "0b$B" #Parse B as bin string
@@ -407,8 +411,8 @@ end
 end
 function sl1(sX)
 
-  B = bin(regbanks[currentRegbank][sX])
-  C = B[1] #Local variable C gets MSB
+  B = bin(regbanks[currentRegbank][sX],8)
+  C = parse(Int,B[1]) #Local variable C gets MSB
   B = B[2:length(B)] #Drops MSB
   B = "$(B)1" #Adds 1 to LSB
   B = "0b$B" #Parse B as bin string
@@ -426,8 +430,8 @@ end
 
 function slx(sX)
 
-  B = bin(regbanks[currentRegbank][sX])
-  C = B[1] #Local variable C gets MSB
+  B = bin(regbanks[currentRegbank][sX],8)
+  C = parse(Int,B[1]) #Local variable C gets MSB
   LSB = B[length(B)] #Keep the LSB
   B = B[2:length(B)] #Drops MSB
   B = "$(B)$(LSB)" #replicates LSB
@@ -456,8 +460,8 @@ C_old = 0 #Local variable C , not to be confused with C the flag
     C_old = 1
   end
 
-  B = bin(regbanks[currentRegbank][sX])
-  C = B[1] #Local variable C gets MSB
+  B = bin(regbanks[currentRegbank][sX],8)
+  C = parse(Int,B[1]) #Local variable C gets MSB
   B = B[2:length(B)] #Drops MSB
   B = "$(B)$(C_old)" #Adds C_old to LSB
   B = "0b$B" #Parse B as bin string
@@ -480,8 +484,8 @@ C_old = 0 #Local variable C , not to be confused with C the flag
 end
 function rl(sX)
 
-  B = bin(regbanks[currentRegbank][sX])
-  C = B[1] #Local variable C gets MSB
+  B = bin(regbanks[currentRegbank][sX],8)
+  C = parse(Int,B[1]) #Local variable C gets MSB
   B = B[2:length(B)] #Drops MSB
   B = "$(B)$(C)" #replicates MSB into LSB
   B = "0b$B" #Parse B as bin string
@@ -505,8 +509,8 @@ end
 
 function sr0(sX)
 
-  B = bin(regbanks[currentRegbank][sX])
-  C = B[length(B)] #Local variable C gets MSB
+  B = bin(regbanks[currentRegbank][sX],8)
+  C = parse(Int,B[length(B)]) #Local variable C gets MSB
   B = B[1:length(B)-1] #Drops LSB
   B = "0$(B)" #Adds 0 to MSB
   B = "0b$B" #Parse B as bin string
@@ -530,39 +534,13 @@ end
 
 function sr1(sX)
   local C
-  B = bin(regbanks[currentRegbank][sX])
-  C = B[length(B)] #Local variable C gets LSB
+  B = bin(regbanks[currentRegbank][sX],8)
+  C = parse(Int,B[length(B)]) #Local variable C gets LSB
   B = B[1:length(B)-1] #Drops LSB
-  B = "1$(B)" #Adds 0 to MSB
+  B = "1$(B)" #Adds 1 to MSB
   B = "0b$B" #Parse B as bin string
   D = parse(UInt8,B)
   set[currentRegbank](sX, D) #Sets sX after sl0
-
-    #flags
-  if !isa(C, Char) && C == 1
-    Flags.set("C",true)
-  else
-    Flags.set("C",false)
-  end
-
-  if regbanks[currentRegbank][sX] == 0
-    Flags.set("Z",true)
-  else
-    Flags.set("Z",false)
-  end
-
-end
-
-function srx(sX)
-
-  B = bin(regbanks[currentRegbank][sX])
-  C = B[length(B)] #Local variable C gets LSB
-  MSB = B[1] #Keep the MSB
-  B = B[1:length(B)-1] #Drops LSB
-  B = "$(MSB)$(B)" #replicates LSB
-  B = "0b$B" #Parse B as bin string
-  D = parse(UInt8,B)
-  set[currentRegbank](sX, D) #Sets sX after slx
 
     #flags
   if C == 1
@@ -578,15 +556,41 @@ function srx(sX)
   end
 
 end
+
+function srx(sX)
+  local C
+  B = bin(regbanks[currentRegbank][sX],8)
+  C = parse(Int,B[length(B)]) #Local variable C gets LSB
+  MSB = B[1] #Keep the MSB
+  B = B[1:length(B)-1] #Drops LSB
+  B = "$(MSB)$(B)" #replicates LSB
+  B = "0b$B" #Parse B as bin string
+  D = parse(UInt8,B)
+  set[currentRegbank](sX, D) #Sets sX after slx
+
+    #flags
+  if  C == 1
+    Flags.set("C",true)
+  else
+    Flags.set("C",false)
+  end
+
+  if regbanks[currentRegbank][sX] == 0
+    Flags.set("Z",true)
+  else
+    Flags.set("Z",false)
+  end
+
+end
 function sra(sX)
 
-  C_old = 0 #Local variable C , not to be confused with C the flag
+  local C_old = 0 #Local variable C , not to be confused with C the flag
     if Flags.get("C")
       C_old = 1
     end
 
-    B = bin(regbanks[currentRegbank][sX])
-    C = B[length(B)] #Local variable C gets LSB
+    B = bin(regbanks[currentRegbank][sX],8)
+    C = parse(Int,B[length(B)]) #Local variable C gets LSB
     B = B[1:length(B)-1] #Drops LSB
     B = "$(C_old)$(B)" #Adds Old carry to MSB
     B = "0b$B" #Parse B as bin string
@@ -609,8 +613,8 @@ function sra(sX)
 end
 function rr(sX)
 
-  B = bin(regbanks[currentRegbank][sX])
-  C = B[length(B)] #Local variable C gets LSB
+  B = bin(regbanks[currentRegbank][sX],8)
+  C = parse(Int,B[length(B)]) #Local variable C gets LSB
   B = B[1:length(B)-1] #Drops LSB
   B = "$(C)$(B)" #replicates LSB into MSB
   B = "0b$B" #Parse B as bin string
