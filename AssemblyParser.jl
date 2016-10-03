@@ -24,6 +24,10 @@ function Parse()
 
     splitLine = split(l,r":| |,",keep=false) #Filters text
 
+    for i in 1:length(splitLine) #Brings all instructions to uppercase
+      splitLine[i] = uppercase(splitLine[i])
+    end
+
   #---- Begin Parsing ----#
 
     #CASE: "INST"
@@ -37,7 +41,6 @@ function Parse()
       instructions[counter,2] = chomp(splitLine[2])
       #ADDS LABEL TO DICTIONARY
       labelDict["$(splitLine[1])"] = counter
-
 
     #CASE: "INST + OP1"
     elseif size(splitLine)[1] == 2
