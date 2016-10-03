@@ -645,6 +645,12 @@ end
 function fetch(k) #This function interacts with the scratch pad - hold off on writing until SP complete
 end
 
+function hwbuild(sX)
+  Flags.set("C",true)
+  Flags.set("Z",true)
+  set[currentRegbank](sX, 0) #HWBUILD generic value = 0
+end
+
 function getFlag(flag)
   return Flags.get(flag)
 end
@@ -716,5 +722,7 @@ export regbank
 export store
 
 export fetch
+
+export hwbuild
 
 end

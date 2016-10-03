@@ -122,7 +122,7 @@ of ALU_functions.jl and CPU.jl
 instructionsOneArgDict = Dict("SL0" => functions.sl0, "SL1" => functions.sl1, "SLX" => functions.slx, "SLA" => functions.sla
 , "RL" => functions.rl, "SR0" => functions.sr0, "SR1" => functions.sr1, "SRX" => functions.srx, "SRA" => functions.sra, "RR" => functions.rr, "JUMP" => jump
 , "CALL" => thisCall, "STORE" => functions.store, "FETCH" => functions.fetch, "INPUT" => input
-, "RETURN" => thisReturn, "REGBANK" => functions.regbank) #Creates dictionary of functions w/ one arguments
+, "RETURN" => thisReturn, "REGBANK" => functions.regbank, "HWBUILD" => functions.hwbuild) #Creates dictionary of functions w/ one arguments
 
 instructionsTwoArgDict = Dict("LOAD" => functions.load,"STAR" => functions.star,"AND" => functions.and,"OR" => functions.or,"XOR" => functions.xor,
 "ADD" => functions.add,"ADDCY" => functions.addcy,"SUB" => functions.sub,"SUBCY" => functions.subcy,"TEST" => functions.test,"TESTCY" => functions.testcy,
