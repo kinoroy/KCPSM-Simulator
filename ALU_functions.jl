@@ -137,16 +137,18 @@ if (haskey(regbanks[currentRegbank],sY))
 end
 
 if secondOpRegister
-  set[currentRegbank](sX, regbanks[currentRegbank][sX] + regbanks[currentRegbank][sY] )
+  overflow = (regbanks[currentRegbank][sX] + regbanks[currentRegbank][sY]) > 0xFF
+  set[currentRegbank](sX, UInt8(regbanks[currentRegbank][sX]) + UInt8(regbanks[currentRegbank][sY]) )
 else
-    set[currentRegbank](sX, regbanks[currentRegbank][sX] + parse(UInt8,sY) )
+  overflow = (regbanks[currentRegbank][sX] + parse(UInt8,sY)) > 0xFF
+  set[currentRegbank](sX, UInt8(regbanks[currentRegbank][sX]) + UInt8(parse(UInt8,sY)) )
 end
 
   #flags
   if regbanks[currentRegbank][sX] == 0
     Flags.set("Z", true)
 	end
-  if regbanks[currentRegbank][sX] > 255
+  if overflow
     Flags.set("C", true)
   end
 end
@@ -176,9 +178,11 @@ function addcy(sX, sY)
   end
 
   if secondOpRegister
-    set[currentRegbank](sX, regbanks[currentRegbank][sX] + regbanks[currentRegbank][sY] + C)
+    overflow = (regbanks[currentRegbank][sX] + regbanks[currentRegbank][sY] + C) > 0xff
+    set[currentRegbank](sX, UInt8(regbanks[currentRegbank][sX]) + UInt8(regbanks[currentRegbank][sY]) + UInt8(C))
   else
-      set[currentRegbank](sX, regbanks[currentRegbank][sX] + parse(UInt8,sY) + C)
+    overflow = (regbanks[currentRegbank][sX] + parse(UInt8,sY) + C) > 0xff
+    set[currentRegbank](sX, UInt8(regbanks[currentRegbank][sX]) + UInt8(parse(UInt8,sY)) + UInt8(C))
   end
 
   #flags
@@ -186,7 +190,7 @@ function addcy(sX, sY)
   if (regbanks[currentRegbank][sX] == 0) && (zPrior == true)
     Flags.set("Z",true)
   end
-  if regbanks[currentRegbank][sX] > 255
+  if overflow
     Flags.set("C", true)
   end
 end
@@ -245,7 +249,7 @@ function subcy(sX, sY)
   if (regbanks[currentRegbank][sX] == 0) && (zPrior == true)
     Flags.set("Z", true)
   end
-  if regbanks[currentRegbank][sX] < 0
+  if underflow
     Flags.set("C", true)
   end
 end
@@ -638,7 +642,6 @@ end
 function regbank(new_RegBank::AbstractString)
   global currentRegbank
   currentRegbank = new_RegBank
-  println("Regbank is now: $(currentRegbank)")
 end
 function store(k) #This function interacts with the scratch pad - hold off on writing until SP complete
 end
