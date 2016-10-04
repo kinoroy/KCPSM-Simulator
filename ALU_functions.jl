@@ -645,10 +645,6 @@ function regbank(new_RegBank::AbstractString)
   global currentRegbank
   currentRegbank = new_RegBank
 end
-function store(k) #This function interacts with the scratch pad - hold off on writing until SP complete
-end
-function fetch(k) #This function interacts with the scratch pad - hold off on writing until SP complete
-end
 
 function hwbuild(sX)
   Flags.set("C",true)
