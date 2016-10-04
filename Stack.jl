@@ -9,20 +9,28 @@ function reset()
 end
 
 function push(addr)
+  global depth
+
   if depth + 1 > 30
     throw( OverflowError() )
   end
 
-  global depth = depth + 1
+  depth = depth + 1
 
   s[depth] = addr
 end
 
 function pop()
-    global depth
-    addr = s[depth]
-    depth = depth - 1
-    return addr
+  global depth
+
+  if depth - 1 < 0
+    throw( OverflowError() )
+  end
+
+  addr = s[depth]
+  depth = depth - 1
+
+  return addr
 end
 
 end

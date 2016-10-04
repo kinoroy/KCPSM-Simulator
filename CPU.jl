@@ -142,8 +142,12 @@ function thisCallAt(sX, sY)
 end
 
 function thisReturn()
-  global jumped = true
-  global PC = Stack.pop()
+  try
+    global jumped = true
+    global PC = Stack.pop()
+  catch
+    reset()
+  end
 end
 
 function thisReturn(flag)

@@ -2,7 +2,7 @@ module Scratchpad
 
 sp = zeros(UInt8, 256)
 
-function store(sX,ss) #Should store value sX, into ss. #Both sX, and ss are passed as integer value
+function store(sX, ss) #Should store value sX, into ss. #Both sX, and ss are passed as integer value
     sp[(0xff & ss) + 1] = sX
 end
 
