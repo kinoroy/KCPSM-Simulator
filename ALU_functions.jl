@@ -7,9 +7,11 @@ module functions
 
 include("Regbank.jl")
 include("Flags.jl")
+include("Scratchpad.jl")
 import .regbankA
 import .regbankB
 import .Flags
+import .scratchpad
 
 regbanks = Dict("A" => regbankA.registers, "B" => regbankB.registers)
 set = Dict("A" => regbankA.set,"B" => regbankB.set)
@@ -652,6 +654,24 @@ function hwbuild(sX)
   Flags.set("C",true)
   Flags.set("Z",true)
   set[currentRegbank](sX, 0) #HWBUILD generic value = 0
+end
+
+function store(sX,ss)
+  #store does not affect registers or flag values
+  if (haskey(regbanks[currentRegbank],ss))
+    secondOpRegister = true
+  end
+
+  if secondOpRegister
+    scratchpad.store(regbanks[currentRegbank][sX], regbanks[currentRegbank][sY])
+  else
+    scratchpad.store(regbanks[currentRegbank][sX], parse(Int,ss))
+
+end
+
+function fetch(sX,ss)
+  #fetch does not set flag values
+  set[currentRegbank](sX, sratchpad.fetch(ss))
 end
 
 function getFlag(flag)
