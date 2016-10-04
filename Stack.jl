@@ -1,22 +1,22 @@
 module Stack
 
-s = zeros(UInt, 30)
+s = zeros(Int64, 30)
 depth = 0
 
 function reset()
-    global depth = 0
-    global s
-    zeros(s)
+  global depth = 0
+  global s
+  zeros(s)
 end
 
-function push(addr::UInt8)
-    if depth + 1 > 30
-        throw( OverflowError() )
-    end
+function push(addr)
+  if depth + 1 > 30
+    throw( OverflowError() )
+  end
 
-    global depth = depth + 1
+  global depth = depth + 1
 
-    s[depth] = addr
+  s[depth] = addr
 end
 
 function pop()

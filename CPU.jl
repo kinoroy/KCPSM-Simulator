@@ -85,6 +85,7 @@ end
 
 function jumpAt(sX, sY)
   global jumped
+  global PC
   newAddr = ((UInt8(functions.get(sX)) & (0x0F)) * (0x100)) + UInt8(functions.get(sY)) #New address is lower 4 bits of sX:sY
   jumped = true #The last instruction was a jump instruction
   PC_current = PC
@@ -98,6 +99,7 @@ end
 
 function thisCall(k)
   try
+    global PC
     Stack.push(PC)
     PC = k
   catch # If the Stack overflows then reset
@@ -105,8 +107,49 @@ function thisCall(k)
   end
 end
 
+function thisCall(flag, k)
+  addr = Int64(k)
+  if flag == "Z" && functions.getFlag("Z")
+    thisCall(addr)
+  elseif flag == "NZ" && ! functions.getFlag("Z")
+    thisCall(addr)
+  elseif flag == "C" && functions.getFlag("C")
+    thisCall(addr)
+  elseif flag == "NC" && ! functions.getFlag("C")
+    thisCall(addr)
+  end
+end
+
+function thisCallAt(sX, sY)
+  a = convert(UInt16, sX)
+  b = convert(UInt16, sY)
+
+  # take the lower 4 bits of a
+  a = a & 0xF
+  # take the lower 8 bits of b
+  b = b & 0xFF
+  # shift a left by 8 bits
+  a = a << 8
+
+  addr = a | b
+
+  thisCall(Int64(addr))
+end
+
 function thisReturn()
   global PC = Stack.pop()
+end
+
+function thisReturn(flag)
+  if flag == "Z" && functions.getFlag("Z")
+    thisReturn()
+  elseif flag == "NZ" && ! functions.getFlag("Z")
+    thisReturn()
+  elseif flag == "C" && functions.getFlag("C")
+    thisReturn()
+  elseif flag == "NC" && ! functions.getFlag("C")
+    thisReturn()
+  end
 end
 
 function input(sX)
@@ -147,7 +190,7 @@ instructionsOneArgDict = Dict("SL0" => functions.sl0, "SL1" => functions.sl1, "S
 instructionsTwoArgDict = Dict("LOAD" => functions.load,"STAR" => functions.star,"AND" => functions.and,"OR" => functions.or,"XOR" => functions.xor,
 "ADD" => functions.add,"ADDCY" => functions.addcy,"SUB" => functions.sub,"SUBCY" => functions.subcy,"TEST" => functions.test,"TESTCY" => functions.testcy,
 "COMPARE" => functions.compare,"INPUT" => input,"OUTPUT" => output,"OUTPUTK" => outputk,"STORE" => functions.store,
-"FETCH" => functions.fetch,"JUMP" => jump, "JUMP@" => jumpAt, "CALL" => thisCall) #Creates dictionary of functions w/ two arguments
+"FETCH" => functions.fetch,"JUMP" => jump, "JUMP@" => jumpAt, "CALL" => thisCall, "CALL@" => thisCallAt) #Creates dictionary of functions w/ two arguments
 
 #=------------------------------------------
 BEGIN READING THE INPUT FILE OF INSTRUCTIONS
