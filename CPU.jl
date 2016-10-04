@@ -108,7 +108,7 @@ function thisCall(k)
     Stack.push(PC)
     PC = k
   catch # If the Stack overflows then reset
-    reset()
+    Stack.reset()
   end
 end
 
@@ -146,7 +146,7 @@ function thisReturn()
     global jumped = true
     global PC = Stack.pop()
   catch
-    reset()
+    Stack.reset()
   end
 end
 
@@ -177,7 +177,7 @@ function output(sK,pp)
   end
 
   value_of_sK = functions.get(sK)
-  println("$(hex(portNumber,2)) $(hex(value_of_sK,2))") #Prints output of the format "portNumber registerValue"
+ println("$(hex(portNumber,2)) $(hex(value_of_sK,2))") #Prints output of the format "portNumber registerValue"
 end
 
 function outputk(kk,p)
@@ -215,7 +215,7 @@ BEGIN EXECUTION OF PARSED ADDEMBLY CODE
 
   while PC <= size(instructions)[1] && numJumps<10 #Checks whether the Program Counter has reached the end of the program memory or the program has jumped to the same label 10 times
     currentInst = instructions[PC,2] #Gets the next instruction from the program memory
-
+  # println("$PC")
     # Is this redundant?
     if isempty(currentInst) #Checks if there are no more instructions to execute
       break #End execution immediately

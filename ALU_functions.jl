@@ -138,7 +138,6 @@ function add(sX, sY) # EXAMPLE ON HOW TO USE THE REGISTERS IN REGBANK MODULE
     Flags.set("Z", true)
   else
     Flags.set("Z", false)
-    println("setting Z to false")
   end
 
   if overflow
