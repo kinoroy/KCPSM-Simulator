@@ -18,7 +18,7 @@ import .Stack
 #=-----------------------------------------
 CPU ON - Innitialize power state
 ------------------------------------------=#
-println("on") #Test/Debug print
+#println("on") #Test/Debug print
 called = false
 PC = 1 #"zero" the program counter (counting starts at 1 in Julia)
  #The zero flag is initialized to false by Flags.jl
@@ -253,6 +253,6 @@ BEGIN EXECUTION OF PARSED ADDEMBLY CODE
   CPU OFF
   ------------=#
 
-  println("off") #Test/Debug print
+  #println("off") #Test/Debug print
 
 end
