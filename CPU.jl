@@ -212,7 +212,7 @@ BEGIN READING THE INPUT FILE OF INSTRUCTIONS
 #Runs the parser and returns a list of instructions
 #for the program memory and a dictionary containing
 #all labels and their locations in the program memory
-(instructions,labelDict) = AssemblyParser.Parse() #Note that this is the function Parse from "AssemblyParser.jl", NOT the built in Julia function "parse()"
+(instructions,labelDict) = AssemblyParser.Parse(ARGS) #Note that this is the function Parse from "AssemblyParser.jl", NOT the built in Julia function "parse()"
 
 #=----------------------------------------
 BEGIN EXECUTION OF PARSED ADDEMBLY CODE

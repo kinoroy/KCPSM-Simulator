@@ -2,12 +2,16 @@
 Created by: Kino Roy for CMPT 276, Assignment 1. =#
 module AssemblyParser
 
-function Parse()
+function Parse(arguments)
   #=-----------------------------------------
   Initializing data structures for holding data
   ------------------------------------------=#
   instructions = Array{AbstractString}(2048,4)
   labelDict = Dict() #Creates the dictionary for labels
+    pathToInstructions = "instructions.txt"
+  if(size(arguments)[1]>0)
+    pathToInstructions = arguments[1]
+  end
 
   fill!(instructions, "")
 
