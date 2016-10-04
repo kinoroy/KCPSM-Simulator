@@ -25,7 +25,22 @@ PC = 1 #"zero" the program counter (counting starts at 1 in Julia)
  #The carry flag is initialized to false by Flags.jl
 functions.regbank("A") #Register bank ‘A’ is selected and therefore ‘A’ is the default bank of registers.
 
-Stack.reset() #= pointer in the program counter stack is reset to ensure that the program is able to execute programs
+#= ------------------------
+RESET FUNCTION DECLARATION
+----------------------------=#
+function reset()
+  PC = 1
+  numJumps = 0
+  jumped = false
+
+  functions.Flags.set("C", false)
+  functions.Flags.set("Z", false)
+  functions.regbank("A")
+
+  Stack.reset()
+end
+
+reset() #= pointer in the program counter stack is reset to ensure that the program is able to execute programs
 in which up to 30 nested subroutine calls can be made.=#
 
 #= ------------------------
@@ -36,7 +51,7 @@ global jumped = false #Is true if "jump" is the last instruction executed
 labelDict = Dict() #Dictionary which, maps labels to their address in the program memory
 
 #=-----------------------------------------------
-FUNCTION DECLATATION:
+FUNCTION DECLARATION:
 (ALU functions are located in ALU_functions.jl)
 ------------------------------------------------=#
 
@@ -81,12 +96,17 @@ function jumpAt(sX, sY)
   global PC = PC_new #Change the program coutner to jump to label
 end
 
-function thisCall()
-  Stack.push(PC_current)
+function thisCall(k)
+  try
+    Stack.push(PC)
+    PC = k
+  catch # If the Stack overflows then reset
+    reset()
+  end
 end
 
 function thisReturn()
-  Stack.pop()
+  global PC = Stack.pop()
 end
 
 function input(sX)
@@ -158,7 +178,7 @@ BEGIN EXECUTION OF PARSED ADDEMBLY CODE
     if hasArg1 == false && hasArg2 == false #1st and 2nd arguments are empty
       thisReturn() #Return is the only function which can be called with no arguments
     elseif hasArg1 == true && hasArg2 == false #1st argument is non empty, 2nd is empty
-      instructionsOneArgDict["$(currentInst)"](firstArg) #Call the fucntion with one argument
+      instructionsOneArgDict["$(currentInst)"](firstArg) #Call the function with one argument
     elseif hasArg1 == true && hasArg2 == true #1st argument is non empty, 2nd arument is non empty
       instructionsTwoArgDict["$(currentInst)"](firstArg,secondArg) #Call the function with two arguments
     end
