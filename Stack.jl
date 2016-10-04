@@ -5,8 +5,7 @@ depth = 0
 
 function reset()
   global depth = 0
-  global s
-  zeros(s)
+  global s = zeros(s)
 end
 
 function push(addr)
