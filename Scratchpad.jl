@@ -1,4 +1,4 @@
-module scratchpad
+module Scratchpad
 
 sp = zeroes(UInt8, 256)
 

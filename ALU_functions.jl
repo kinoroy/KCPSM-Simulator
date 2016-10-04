@@ -11,7 +11,7 @@ include("Scratchpad.jl")
 import .regbankA
 import .regbankB
 import .Flags
-import .scratchpad
+import .Scratchpad
 
 regbanks = Dict("A" => regbankA.registers, "B" => regbankB.registers)
 set = Dict("A" => regbankA.set,"B" => regbankB.set)
@@ -659,9 +659,9 @@ function store(sX,ss)
   end
 
   if secondOpRegister
-    scratchpad.store(regbanks[currentRegbank][sX], regbanks[currentRegbank][sY])
+    Scratchpad.store(regbanks[currentRegbank][sX], regbanks[currentRegbank][sY])
   else
-    scratchpad.store(regbanks[currentRegbank][sX], parse(Int,ss))
+    Scratchpad.store(regbanks[currentRegbank][sX], parse(Int,ss))
 
 end
 
