@@ -136,6 +136,9 @@ function add(sX, sY) # EXAMPLE ON HOW TO USE THE REGISTERS IN REGBANK MODULE
 
   if regbanks[currentRegbank][sX] == 0
     Flags.set("Z", true)
+  else
+    Flags.set("Z", false)
+    println("setting Z to false")
   end
 
   if overflow
@@ -175,7 +178,7 @@ function addcy(sX, sY)
     set[currentRegbank](sX, UInt8(regbanks[currentRegbank][sX]) + UInt8(parse(UInt8,sY)) + UInt8(C))
   end
 
-  #The zero flag (Z) will be set if the 8-bit result returned 
+  #The zero flag (Z) will be set if the 8-bit result returned
   #to ‘sX’ is zero and the zero flag was set prior to the ADDCY instruction
   if (regbanks[currentRegbank][sX] == 0) && (zPrior == true)
     Flags.set("Z",true)
@@ -618,12 +621,14 @@ end
 
 function store(sX, ss)
   # Store does not affect registers or flag values
-  if (haskey(regbanks[currentRegbank],ss))
+  secondOpRegister = false
+  if (ss[1] == '(')
     secondOpRegister = true
+    ss=ss[2:3]
   end
 
   if secondOpRegister
-    Scratchpad.store(regbanks[currentRegbank][sX], regbanks[currentRegbank][sY])
+    Scratchpad.store(regbanks[currentRegbank][sX], regbanks[currentRegbank][ss])
   else
     Scratchpad.store(regbanks[currentRegbank][sX], parse(Int,ss))
   end
@@ -631,7 +636,17 @@ end
 
 function fetch(sX,ss)
   #fetch does not set flag values
-  set[currentRegbank](sX, sratchpad.fetch(ss))
+  secondOpRegister = false
+  if (ss[1] == '(')
+    secondOpRegister = true
+    ss=ss[2:3]
+  end
+  if secondOpRegister
+      set[currentRegbank](sX, Scratchpad.fetch(regbanks[currentRegbank][ss]))
+  else
+    set[currentRegbank](sX, Scratchpad.fetch(parse(Int,ss)))
+  end
+
 end
 
 function getFlag(flag)

@@ -19,7 +19,7 @@ import .Stack
 CPU ON - Innitialize power state
 ------------------------------------------=#
 println("on") #Test/Debug print
-
+called = false
 PC = 1 #"zero" the program counter (counting starts at 1 in Julia)
  #The zero flag is initialized to false by Flags.jl
  #The carry flag is initialized to false by Flags.jl
@@ -29,6 +29,9 @@ functions.regbank("A") #Register bank ‘A’ is selected and therefore ‘A’ 
 RESET FUNCTION DECLARATION
 ----------------------------=#
 function reset()
+  global PC
+  global numJumps
+  global jumped
   PC = 1
   numJumps = 0
   jumped = false
@@ -89,7 +92,7 @@ function jumpAt(sX, sY)
   newAddr = ((UInt8(functions.get(sX)) & (0x0F)) * (0x100)) + UInt8(functions.get(sY)) #New address is lower 4 bits of sX:sY
   jumped = true #The last instruction was a jump instruction
   PC_current = PC
-  println("The address is:$(newAddr)")
+#  println("The address is:$(newAddr)")
   PC_new = newAddr #Change the program counter to point to new address
   if PC_new == PC_current
     global numJumps+=1 #The last instruction jumped to itself
@@ -100,6 +103,8 @@ end
 function thisCall(k)
   try
     global PC
+    global jumped
+    jumped = true
     Stack.push(PC)
     PC = k
   catch # If the Stack overflows then reset
@@ -108,7 +113,7 @@ function thisCall(k)
 end
 
 function thisCall(flag, k)
-  addr = Int64(k)
+  addr = labelDict["$k"]
   if flag == "Z" && functions.getFlag("Z")
     thisCall(addr)
   elseif flag == "NZ" && ! functions.getFlag("Z")
@@ -137,6 +142,7 @@ function thisCallAt(sX, sY)
 end
 
 function thisReturn()
+  global jumped = true
   global PC = Stack.pop()
 end
 
@@ -153,7 +159,6 @@ function thisReturn(flag)
 end
 
 function input(sX)
-  println("Type a number between 0-255: I'll wait...") #Test/debug print
   nIn = parse(UInt8,readline(STDIN)) #Reads in a number from 0 to 255 to write to the target register
   functions.setReg(sX,nIn)
 end
