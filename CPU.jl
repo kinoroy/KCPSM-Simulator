@@ -186,6 +186,11 @@ function outputk(kk,p)
   println("$(hex(portNumber,2)) $(hex(value,2))") #Prints output of the format "portNumber Value"
 end
 
+function loadAndReturn(sX, kk)
+  functions.load(sX, kk)
+  thisReturn()
+end
+
 #=-------------------------------------------------------------------
 These dictionaries map instruction codeword syntax to Julia functions
 of ALU_functions.jl and CPU.jl
@@ -199,7 +204,7 @@ instructionsOneArgDict = Dict("SL0" => functions.sl0, "SL1" => functions.sl1, "S
 instructionsTwoArgDict = Dict("LOAD" => functions.load,"STAR" => functions.star,"AND" => functions.and,"OR" => functions.or,"XOR" => functions.xor,
 "ADD" => functions.add,"ADDCY" => functions.addcy,"SUB" => functions.sub,"SUBCY" => functions.subcy,"TEST" => functions.test,"TESTCY" => functions.testcy,
 "COMPARE" => functions.compare,"INPUT" => input,"OUTPUT" => output,"OUTPUTK" => outputk,"STORE" => functions.store,
-"FETCH" => functions.fetch,"JUMP" => jump, "JUMP@" => jumpAt, "CALL" => thisCall, "CALL@" => thisCallAt) #Creates dictionary of functions w/ two arguments
+"FETCH" => functions.fetch,"JUMP" => jump, "JUMP@" => jumpAt, "CALL" => thisCall, "CALL@" => thisCallAt, "LOAD&RETURN" => loadAndReturn) #Creates dictionary of functions w/ two arguments
 
 #=------------------------------------------
 BEGIN READING THE INPUT FILE OF INSTRUCTIONS
