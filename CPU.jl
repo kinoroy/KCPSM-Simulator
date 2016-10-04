@@ -108,7 +108,7 @@ function thisCall(k)
     Stack.push(PC)
     PC = k
   catch # If the Stack overflows then reset
-    Stack.reset()
+    reset()
   end
 end
 
@@ -146,7 +146,7 @@ function thisReturn()
     global jumped = true
     global PC = Stack.pop()
   catch
-    Stack.reset()
+    reset()
   end
 end
 

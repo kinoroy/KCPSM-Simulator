@@ -69,11 +69,13 @@ function and(sX, sY)
 
   if regbanks[currentRegbank][sX] == 0
     Flags.set("Z",true)
+  else
+    Flags.set("Z",false)
   end
 
   Flags.set("C",false)
 
-  #println("Z is now $(Flags.get("Z")) and C is now $(Flags.get("C"))")
+
 end
 
 function or(sX, sY)
@@ -92,6 +94,8 @@ function or(sX, sY)
   #Flags
   if regbanks[currentRegbank][sX] == 0
     Flags.set("Z", true)
+  else
+    Flags.set("Z", false)
   end
 
   Flags.set("C", false)
@@ -113,6 +117,8 @@ function xor(sX, sY)
   #Flags
   if regbanks[currentRegbank][sX] == 0
     Flags.set("Z", true)
+  else
+    Flags.set("Z", false)
   end
 
   Flags.set("C", false)
@@ -181,9 +187,14 @@ function addcy(sX, sY)
   #to ‘sX’ is zero and the zero flag was set prior to the ADDCY instruction
   if (regbanks[currentRegbank][sX] == 0) && (zPrior == true)
     Flags.set("Z",true)
+  else
+    Flags.set("Z", false)
   end
+
   if overflow
     Flags.set("C", true)
+  else
+    Flags.set("C", false)
   end
 end
 
@@ -209,6 +220,8 @@ function sub(sX, sY)
 
   if underflow
     Flags.set("C", true)
+  else
+    Flags.set("C", false)
   end
 end
 
@@ -241,9 +254,13 @@ function subcy(sX, sY)
   #The zero flag (Z) will be set if the 8-bit result returned to ‘sX’ is zero and the zero flag was set prior to the SUBCY instruction.
   if (regbanks[currentRegbank][sX] == 0) && (zPrior == true)
     Flags.set("Z", true)
+  else
+    Flags.set("Z", false)
   end
   if underflow
     Flags.set("C", true)
+  else
+    Flags.set("C", false)
   end
 end
 
@@ -269,9 +286,13 @@ function test(sX, sY)
   # Flags
   if tempRes == 0 #The zero flag (Z) will be set if all 8-bits of the temporary result are zero.
     Flags.set("Z", true)
+  else
+    Flags.set("Z", false)
   end
   if oddNum1s == true #The carry flag (C) will be set if the temporary result contains an odd number of bits set to ‘1’
     Flags.set("C", true)
+  else
+    Flags.set("C", false)
   end
 end
 
@@ -297,9 +318,13 @@ function testcy(sX, sY)
   #flags
   if tempRes == 0 #The zero flag (Z) will be set if all 8-bits of the temporary result are zero and the zero flag was set prior to the TESTCY instruction.
     Flags.set("Z", true)
+  else
+    Flags.set("Z", false)
   end
   if oddNum1s == true #The carry flag (C) will be set if the temporary result contains an odd number of bits set to ‘1’
     Flags.set("C", true)
+  else
+    Flags.set("C", false)
   end
 end
 
