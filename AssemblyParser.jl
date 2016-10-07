@@ -8,10 +8,11 @@ function Parse(arguments)
   ------------------------------------------=#
   instructions = Array{AbstractString}(2048,4)
   labelDict = Dict() #Creates the dictionary for labels
-    pathToInstructions = "instructions.txt"
-  if(size(arguments)[1]>0)
-    pathToInstructions = arguments[1]
-  end
+
+  global pathToInstructions = "instructions.txt"
+if(size(arguments)[1]>0)
+  pathToInstructions = arguments[1]
+end
 
   fill!(instructions, "")
 
@@ -84,7 +85,8 @@ function Parse(arguments)
 end
 
 function readFile()
-  stream = open("instructions.txt") #Open the input file and set the input stream
+  global pathToInstructions
+  stream = open(pathToInstructions) #Open the input file and set the input stream
   lines = readlines(stream) # Create an array with each element, an instruction
   close(stream)
 

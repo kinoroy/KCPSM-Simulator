@@ -161,6 +161,7 @@ end
 
 function addcy(sX, sY)
   C = 0  #Local variable C, not to be confused with global flag C
+  zPrior = false
   if Flags.get("C")
     C = 1
   end
@@ -227,7 +228,7 @@ end
 
 function subcy(sX, sY)
   C = 0 # Local variable C, not to be confused with C the global flag
-
+  zPrior =false
   if Flags.get("C")
     C = 1
   end
